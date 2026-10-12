@@ -1,0 +1,25 @@
+# Build outputs and local dependency overrides
+.lake/
+*.olean
+*.olean.*
+*.ir
+*.ilean
+*.trace
+# Local tools, scratch proofs, and working notes
+.agents/
+.codex/
+.vscode/
+.firstparents_*
+review/
+proofgraph/
+registry/
+skills-installation.json
+__pycache__/
+*.pyc
+.DS_Store
+# TeX build products
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
