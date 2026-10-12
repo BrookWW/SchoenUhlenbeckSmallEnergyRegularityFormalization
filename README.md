@@ -272,14 +272,13 @@ scope available for separate inspection.
 
 ## Reuse and acknowledgments
 
-We thank **Scott Armstrong** for
+We gratefully acknowledge
 [LeanAutoformalizationSkills](https://github.com/scottnarmstrong/LeanAutoformalizationSkills),
+developed by [**Scott Armstrong**](https://github.com/scottnarmstrong), which we
 used for statement audits, proof dependency analysis, proof development, and
 release checks. The installed revision was
 `05a07311f16bc581729e52f3e73647b95fa9bef1`; the collection is licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-The presentation also takes inspiration from the
-[Caffarelli–Kohn–Nirenberg formalization](https://github.com/scottnarmstrong/CaffarelliKohnNirenberg).
 
 Our earlier [LeanStationaryHarmonicMaps](https://github.com/BrookWW/LeanStationaryHarmonicMaps)
 provides the radial vector-field calculus and stress algebra adapted in
