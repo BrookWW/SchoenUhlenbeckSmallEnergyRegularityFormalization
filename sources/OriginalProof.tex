@@ -1,0 +1,606 @@
+% !TeX program = xelatex
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{esint}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{microtype}
+\setlength{\parskip}{0.35em}
+\setlist{nosep}
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Nn}{\mathbb N}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\dx}{\dd x}
+\newcommand{\dy}{\dd y}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\avint}{\mathop{\fint}}
+\newcommand{\W}{W^{1,2}}
+\newcommand{\Wo}{W^{1,2}_0}
+\newcommand{\E}{\mathcal E}
+\newcommand{\Th}{\Theta}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\title{Small-energy regularity for energy-minimizing harmonic maps\\\large A detailed Schoen--Uhlenbeck proof following Giaquinta--Martinazzi}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note proves small-energy Hölder regularity for locally energy-minimizing maps on Euclidean domains with values in a smooth compact submanifold without boundary. The argument follows Section 10.3.1 of the Giaquinta--Martinazzi textbook: convolution smoothing and nearest-point projection, Euclidean harmonic replacement, variable-radius smoothing on an annulus of small energy, energy decay from minimality, and finally rescaling, iteration, and a Morrey argument. We supply the weak variation, monotonicity, projection, gluing, and density arguments and correct the inconsistent smoothing scales in the source. The target results are Theorem 10.15 and Proposition 10.16 of the textbook; the conclusion is Hölder continuity.
+\end{abstract}
+
+\section{Scope, notation, and the target theorem}
+
+Fix an integer $n\ge2$ and a nonempty smooth compact embedded submanifold $N\subset\R^q$ without boundary, equipped with the induced Riemannian metric. Each $B_r(a)$ is an open Euclidean ball in $\R^n$; an omitted center means $0$. For the matrix $Du$, the notation $|Du|$ denotes the Hilbert--Schmidt norm. Norms of linear maps such as $\norm{D\Pi}$ and $\norm{DF_y}$ are operator norms, and $\norm{D^2\Pi}$ is the bilinear operator norm. Constants may depend on $n$ and the fixed embedded manifold $N$; once the smoothing kernel has been chosen, its constants are also fixed. Extensions to general Riemannian domains are outside the scope of this note.
+
+\begin{definition}[Locally energy-minimizing map]
+Write
+\[
+\W_{\mathrm{loc}}(\Omega,N)
+=\{u\in\W_{\mathrm{loc}}(\Omega,\R^q):u(x)\in N\text{ for almost every }x\}.
+\]
+We call $u$ locally energy minimizing on $\Omega$ if, for every $B_r(a)\Subset\Omega$ and every $v\in\W(B_r(a),N)$ with $v-u\in\Wo(B_r(a),\R^q)$, we have
+\[
+\E(u;B_r(a)):=\int_{B_r(a)}|Du|^2\dx
+\le\int_{B_r(a)}|Dv|^2\dx.
+\]
+On a ball, $v-u\in\Wo$ is equivalent to equality of the Sobolev traces of the two maps.
+\end{definition}
+
+\begin{theorem}[Small-energy regularity]\label{thm:main}
+There exist $\varepsilon_{\mathrm{reg}}>0$, $\alpha\in(0,1)$, and $C<\infty$, depending only on $n,N$, with the following property. Suppose that $u\in\W_{\mathrm{loc}}(\Omega,N)$ is locally energy minimizing, $B_R(a)\Subset\Omega$, and
+\begin{equation}\label{eq:small-main}
+\Th_u(a,R):=R^{2-n}\int_{B_R(a)}|Du|^2\dx\le\varepsilon_{\mathrm{reg}}.
+\end{equation}
+Then $u$ has a unique continuous representative on $B_{R/2}(a)$, denoted by $\widetilde u$, with $\widetilde u(B_{R/2}(a))\subset N$, and
+\begin{equation}\label{eq:holder-main}
+[\widetilde u]_{C^{0,\alpha}(B_{R/2}(a))}
+\le C R^{-\alpha}\Th_u(a,R)^{1/2}.
+\end{equation}
+In particular, $\widetilde u\in C^{0,\alpha}(B_{R/2}(a),N)$.
+\end{theorem}
+
+A continuous representative here means a map that agrees almost everywhere with the original Sobolev map. Upgrading continuity to smoothness requires a further elliptic regularity argument and is not part of the target theorem.
+
+\paragraph{Foundational facts used.}
+We use standard facts about Euclidean Sobolev spaces: density of smooth Euclidean-valued functions in $\W$ on balls, the Sobolev chain rule for smooth Lipschitz maps, change of variables under smooth bi-Lipschitz maps, traces and $\Wo$, polar integration, the Lebesgue differentiation theorem, and the tubular neighborhood theorem for compact smooth embedded manifolds. For linear harmonic functions we use the Poisson solution on a ball, the maximum principle, and the mean-value property. These facts do not include the small-energy regularity theorem to be proved, nonlinear energy decay, or Sobolev density of smooth manifold-valued maps. We prove the Poincaré, variation and monotonicity, variable smoothing, and Morrey statements needed below. This is a complete mathematical proof based on standard analytical foundations; it is not a formal derivation of every foundational theorem from a construction of the real numbers.
+
+\section{Basic estimates, projection, and variational equations}
+
+\begin{lemma}[Poincaré estimate on a ball]\label{lem:poincare}
+Let $f\in\W(B_r(a),\R^q)$ and $f_{B_r(a)}:=\avint_{B_r(a)}f$. Then
+\begin{equation}\label{eq:poincare}
+\int_{B_r(a)}|f-f_{B_r(a)}|^2\dx
+\le C_P r^2\int_{B_r(a)}|Df|^2\dx,
+\qquad C_P=2^{n+1}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+First assume that $f$ is smooth and write $B=B_r(a)$. The variance identity and integration along line segments give
+\[
+\int_B|f-f_B|^2
+=\frac1{2|B|}\int_B\int_B|f(x)-f(y)|^2\dx\dy,
+\]
+\[
+|f(x)-f(y)|^2\le4r^2\int_0^1|Df((1-t)x+ty)|^2\dd t.
+\]
+Convexity of the ball keeps each segment inside it. For $0\le t\le1/2$, fix $y$ and change variables by $z=(1-t)x+ty$; the inverse Jacobian is at most $2^n$. For $1/2\le t\le1$, fix $x$ and make the corresponding change of variables in $y$. Thus
+\[
+\int_B\int_B\int_0^1|Df((1-t)x+ty)|^2\dd t\dx\dy
+\le2^n|B|\int_B|Df|^2.
+\]
+Substitution gives \eqref{eq:poincare}. Approximation by smooth Euclidean-valued functions in $\W(B)$ proves the general case.
+\end{proof}
+
+\begin{lemma}[Nearest-point projection and its extension]\label{lem:projection}
+There exists $\rho_N>0$ such that the nearest-point projection
+\[
+\Pi:U_{2\rho_N}:=\{z\in\R^q:\dist(z,N)<2\rho_N\}\longrightarrow N
+\]
+is smooth, $\Pi|_N=\mathrm{id}$, and $\rho_N$ can be chosen so that
+\[
+\norm{D\Pi(z)}\le2\quad(z\in U_{2\rho_N}),
+\qquad \sup_{p\in N}\norm{D^2\Pi(p)}=:K_N<\infty.
+\]
+There is a smooth map $Q:\R^q\to\R^q$ with bounded first and second derivatives that on $U_{\rho_N}$ equals $\Pi$. This $Q$ is a Euclidean-valued extension; it need not take values in $N$ on the whole space.
+\end{lemma}
+\begin{proof}
+The tubular neighborhood theorem gives a unique smooth nearest-point projection. For $p\in N$, $D\Pi(p)$ is the orthogonal projection onto $T_pN$, so its operator norm is at most $1$. Compactness, continuity, and a reduction of the tubular radius give the bound $2$ in the neighborhood and the required second derivative bound. Choose $p_0\in N$ and a smooth cutoff $\chi$ that equals, on $U_{\rho_N}$, the value $1$, and near the boundary of $U_{2\rho_N}$, the value $0$. For example, within the tubular neighborhood it can be chosen as a smooth function of the squared distance. Set
+\[
+Q(z)=\chi(z)\Pi(z)+(1-\chi(z))p_0
+\]
+and set $Q=p_0$ outside the neighborhood. The cutoff vanishes near the boundary, so this extension is smooth. Its nonconstant part has compact support, and hence its derivatives are bounded.
+\end{proof}
+
+\begin{lemma}[Outer variations and the weak harmonic map equation]\label{lem:outer}
+A locally energy-minimizing map satisfies the distributional equation
+\begin{equation}\label{eq:weak-euler}
+\Delta u=F_u,
+\qquad
+F_u:=\sum_{j=1}^n D^2\Pi(u)[\partial_j u,\partial_j u],
+\qquad |F_u|\le K_N|Du|^2.
+\end{equation}
+That is, for every $\psi\in C_c^\infty(\Omega,\R^q)$,
+\[
+\int_\Omega Du:D\psi\dx=-\int_\Omega F_u\cdot\psi\dx.
+\]
+\end{lemma}
+\begin{proof}
+From $\Pi(u)=u$ and the chain rule, $D\Pi(u)\partial_j u=\partial_j u$ almost everywhere, and hence $\partial_j u\in T_{u}N$. For sufficiently small $|t|$,
+\[
+u_t=\Pi(u+t\psi)
+\]
+is defined, takes values in $N$, and outside the support of $\psi$ equals $u$, so it is an admissible competitor. Restricting the calculation to a ball compactly contained in $\Omega$ that contains this support, or using several local variations, minimality implies that the energy derivative at $t=0$ vanishes. Equivalently, one may first take a test function supported in a single such ball and then decompose an arbitrary test function. The chain rule and the bounded derivatives of the projection allow the difference quotients to be dominated by $C(|Du|^2+|D\psi|^2)$, and therefore
+\begin{equation}\label{eq:outer-first}
+0=\sum_j\int\partial_j u\cdot
+\bigl(D\Pi(u)\partial_j\psi+D^2\Pi(u)[\partial_j u,\psi]\bigr)\dx.
+\end{equation}
+Within the tubular neighborhood, the nearest-point projection satisfies
+\[
+\Pi(z)=\nabla_z\bigl(\tfrac12|z|^2-\tfrac12\dist(z,N)^2\bigr).
+\]
+Thus $D\Pi$ is symmetric and the trilinear form associated with $D^2\Pi$ is fully symmetric. Consequently,
+\[
+\partial_j u\cdot D\Pi(u)\partial_j\psi=\partial_j u\cdot\partial_j\psi,
+\quad
+\partial_j u\cdot D^2\Pi(u)[\partial_j u,\psi]
+=\psi\cdot D^2\Pi(u)[\partial_j u,\partial_j u].
+\]
+Substitution into \eqref{eq:outer-first} proves the claim. If the second fundamental form is defined by $A_p(v,w)=-D^2\Pi(p)[v,w]$, the same equation has the textbook form $\Delta u+\sum_j A_u(\partial_j u,\partial_j u)=0$.
+\end{proof}
+
+\begin{lemma}[Inner variations and monotonicity]\label{lem:monotonicity}
+For $B_R(a)\Subset\Omega$, the function
+\[
+\Th_u(a,r)=r^{2-n}\E(u;B_r(a)),\qquad0<r\le R,
+\]
+is nondecreasing. More precisely, for $0<s<r\le R$,
+\begin{equation}\label{eq:monotonicity}
+\Th_u(a,r)-\Th_u(a,s)
+=2\int_{B_r(a)\setminus B_s(a)}
+|x-a|^{2-n}|\partial_{\mathrm{rad}}u|^2\dx,
+\end{equation}
+where $\partial_{\mathrm{rad}}u=Du(x)(x-a)/|x-a|$; its value at $x=a$ is immaterial.
+\end{lemma}
+\begin{proof}
+Let $\zeta\in C_c^\infty(\Omega,\R^n)$ have support in a ball compactly contained in $\Omega$, and set $T_t(x)=x+t\zeta(x)$. For small $|t|$, $T_t$ is a smooth diffeomorphism preserving that ball. The map $u\circ T_t^{-1}$ is an admissible competitor. Changing variables and differentiating the energy gives
+\begin{equation}\label{eq:stationarity}
+\int\bigl(|Du|^2\operatorname{div}\zeta
+-2\sum_{i,j}\partial_i u\cdot\partial_j u\,\partial_i\zeta_j\bigr)\dx=0.
+\end{equation}
+Since $\zeta$ is smooth and compactly supported, the Jacobian and inverse derivative in the change of variables are uniformly bounded for small $t$, and the difference quotients are dominated by $C|Du|^2$. This justifies differentiation for Sobolev maps as well.
+
+After translation, take $a=0$ and $\zeta(x)=\eta(|x|)x$, with $\eta$ constant near the origin. Equation \eqref{eq:stationarity} gives
+\begin{equation}\label{eq:radial-stationarity}
+\int\bigl((n-2)\eta(r)+r\eta'(r)\bigr)|Du|^2\dx
+=2\int r\eta'(r)|\partial_{\mathrm{rad}}u|^2\dx.
+\end{equation}
+Write $e(t)=\int_{B_t}|Du|^2$ and $g(t)=\int_{\partial B_t}|\partial_{\mathrm{rad}}u|^2\dd S$. Polar integration shows that $e$ is absolutely continuous on $[0,R]$ and $e'(t)=\int_{\partial B_t}|Du|^2\dd S$ almost everywhere. Approximate by radial cutoffs that on $[0,t]$ equal $1$ and on $(t,t+\delta)$ decrease to $0$. At Lebesgue points of $e',g$, equation \eqref{eq:radial-stationarity} gives
+\[
+(n-2)e(t)-t e'(t)=-2t g(t).
+\]
+Therefore, on each $[s,r]\subset(0,R)$,
+\[
+\frac{\mathrm d}{\mathrm dt}(t^{2-n}e(t))=2t^{2-n}g(t)\ge0
+\quad\text{almost everywhere}.
+\]
+Integration and the polar integration formula yield \eqref{eq:monotonicity}. Absolute continuity makes the identity valid for all positive endpoints. The endpoint $R$ can be reached from inside the chosen ball. The same argument applies when $n=2$.
+\end{proof}
+
+\section{Fixed-radius smoothing and harmonic replacement}
+
+We now consider a locally energy-minimizing map on $B_1$ and write
+\[
+E=\int_{B_1}|Du|^2<\infty.
+\]
+Compactness of $N$ makes $u$ bounded, so $u\in\W(B_1,\R^q)$. Fix $\varphi\in C_c^\infty(B_1)$ with $\varphi\ge0$ and $\int\varphi=1$; it may be chosen radial. Set
+\[
+m_h(x)=\int_{B_1}\varphi(y)u(x-hy)\dy,
+\qquad x\in B_{1/2},\quad0<h\le1/4.
+\]
+This convolution is smooth in a neighborhood of $B_{1/2}$.
+
+\begin{lemma}[Uniform smoothing estimates]\label{lem:mollifier}
+There is a constant $C_0=C_0(n,\varphi)$ such that
+\begin{align}
+\dist(m_h(x),N)^2&\le C_0E,\label{eq:tube-distance}\\
+|Dm_h(x)|^2&\le C_0 E h^{-2},\label{eq:moll-gradient}\\
+\int_{B_{1/2}}|Dm_h|^2\dx&\le E,\label{eq:moll-energy}\\
+\int_{B_{1/2}}|\Delta m_h|\dx&\le K_NE.\label{eq:moll-laplacian}
+\end{align}
+The first two inequalities hold for all the $x,h$ specified above.
+\end{lemma}
+\begin{proof}
+For $x\in B_{1/2}$, we have $B_{1/2}(x)\Subset B_1$. Monotonicity gives
+\begin{equation}\label{eq:small-centered}
+\int_{B_h(x)}|Du|^2\le2^{n-2}h^{n-2}E.
+\end{equation}
+Write $b=u_{B_h(x)}$ and $\varphi_h(z)=h^{-n}\varphi(z/h)$. Since $u(z)\in N$ almost everywhere, the variance identity and the Poincaré inequality give
+\begin{align*}
+\dist(m_h(x),N)^2
+&\le\int_{B_h(x)}\varphi_h(x-z)|u(z)-m_h(x)|^2\dd z\\
+&\le\int_{B_h(x)}\varphi_h(x-z)|u(z)-b|^2\dd z\\
+&\le\norm{\varphi}_\infty h^{-n} C_P h^2
+\int_{B_h(x)}|Du|^2
+\le C_0E.
+\end{align*}
+Convolving the weak derivatives and using Jensen's inequality and \eqref{eq:small-centered}, we obtain
+\[
+|Dm_h(x)|^2\le\int_{B_1}\varphi(y)|Du(x-hy)|^2\dy
+\le\norm{\varphi}_\infty h^{-n}\int_{B_h(x)}|Du|^2
+\le C_0Eh^{-2}.
+\]
+Integrating in $x$, Fubini's theorem and $B_{1/2}-hy\subset B_{3/4}\subset B_1$ give \eqref{eq:moll-energy}. Finally, convolution commutes with the distributional equation \eqref{eq:weak-euler}:
+\[
+\Delta m_h(x)=\int_{B_1}\varphi(y)F_u(x-hy)\dy.
+\]
+The same use of Fubini's theorem and $|F_u|\le K_N|Du|^2$ gives \eqref{eq:moll-laplacian}.
+\end{proof}
+
+Assume now that $E\le\eta$, where $\eta\in(0,1)$ will be chosen uniformly in Section \ref{sec:decay}. Set
+\begin{equation}\label{eq:fixed-scale}
+\bar h=\eta^{1/4},\qquad m=m_{\bar h},\qquad u_{\bar h}=\Pi\circ m.
+\end{equation}
+If $\bar h\le1/4$ and $\sqrt{C_0\eta}<\rho_N$, the last map is smooth on $B_{1/2}$ and takes values in $N$. By \eqref{eq:moll-gradient},
+\begin{equation}\label{eq:oscillation}
+\sup_{B_{1/2}}|Dm|\le C\eta^{1/4},
+\qquad \sup_{B_{1/2}}|m(x)-m(0)|\le C\eta^{1/4}.
+\end{equation}
+
+\begin{lemma}[Harmonic replacement estimate]\label{lem:harmonic}
+Under the small-parameter conditions above, for $0<\theta\le1/4$ we have
+\begin{equation}\label{eq:projected-energy}
+\int_{B_\theta}|Du_{\bar h}|^2\dx
+\le C_1\bigl(\eta^{1/4}+\theta^n\bigr)E,
+\end{equation}
+where $C_1$ is independent of $\eta,\theta,u$.
+\end{lemma}
+\begin{proof}
+Let $v$ solve the linear Euclidean Dirichlet problem
+\[
+\Delta v=0\quad\text{in }B_{1/2},\qquad v=m\quad\text{on }\partial B_{1/2}.
+\]
+This is a componentwise linear harmonic replacement, which is allowed to leave $N$. Existence and smoothness follow from the Poisson formula on a ball: for a ball of radius $s$ and smooth boundary data $g$, the solution is
+\[
+v(x)=\frac{s^2-|x|^2}{n\omega_n s}
+\int_{\partial B_s}\frac{g(y)}{|x-y|^n}\dd S_y,
+\qquad \omega_n=|B_1|.
+\]
+Here take $s=1/2,g=m|_{\partial B_{1/2}}$. Since the boundary data are smooth in a neighborhood of the boundary, the solution is smooth on the closed ball.
+
+Since $m-v\in\Wo(B_{1/2})$ and $v$ is weakly harmonic,
+\[
+\int_{B_{1/2}}|Dm|^2
+=\int_{B_{1/2}}|Dv|^2+\int_{B_{1/2}}|D(m-v)|^2,
+\quad\text{hence}\quad \int_{B_{1/2}}|Dv|^2\le E.
+\]
+The function $|v-m(0)|^2$ is subharmonic, so the maximum principle and \eqref{eq:oscillation} give
+\begin{equation}\label{eq:harmonic-difference}
+\norm{m-v}_{L^\infty(B_{1/2})}\le C\eta^{1/4}.
+\end{equation}
+Each $\partial_jv$ is harmonic, and hence $|Dv|^2$ is subharmonic. For $x\in B_{1/4}$, the mean-value inequality on $B_{1/4}(x)\subset B_{1/2}$ gives
+\begin{equation}\label{eq:harmonic-gradient}
+\sup_{B_{1/4}}|Dv|^2\le C\int_{B_{1/2}}|Dv|^2\le CE.
+\end{equation}
+Integrating by parts for $m-v$, whose boundary values vanish, and using $\Delta v=0$, we obtain
+\begin{align}
+\int_{B_{1/2}}|D(m-v)|^2
+&=-\int_{B_{1/2}}(m-v)\cdot\Delta m\dx\notag\\
+&\le\norm{m-v}_\infty\int_{B_{1/2}}|\Delta m|\dx
+\le C\eta^{1/4}E.\label{eq:harmonic-error}
+\end{align}
+Finally, $\norm{D\Pi}\le2$, $|Dm|^2\le2|D(m-v)|^2+2|Dv|^2$, and \eqref{eq:harmonic-gradient}--\eqref{eq:harmonic-error} give
+\[
+\int_{B_\theta}|Du_{\bar h}|^2
+\le8\int_{B_\theta}|D(m-v)|^2+8\int_{B_\theta}|Dv|^2
+\le C\eta^{1/4}E+C\theta^nE.
+\]
+\end{proof}
+
+\section{Variable-radius smoothing and annular gluing}\label{sec:gluing}
+
+\begin{lemma}[Sobolev estimates for variable smoothing]\label{lem:variable}
+Let $\delta>0$, $\theta>\delta$, and $\theta+2\delta<1/2$, and let the smooth radial function $s:\R^n\to[0,\bar h]$ satisfy
+\[
+s=\bar h\text{ on }B_\theta,\qquad
+s=0\text{ on }\R^n\setminus B_{\theta+\delta},\qquad
+\bar h\le\delta,\qquad L:=\norm{Ds}_\infty\le1/4.
+\]
+Write
+\[
+U=B_{\theta+2\delta},\quad
+A=B_{\theta+\delta}\setminus\overline{B_\theta},\quad
+A^+=B_{\theta+2\delta}\setminus\overline{B_{\theta-\delta}}.
+\]
+For $f\in\W(U,\R^q)$, define
+\[
+T_sf(x)=\int_{B_1}\varphi(y)f(x-s(x)y)\dy.
+\]
+Then $T_s$ is a bounded linear operator on $\W(U,\R^q)$, and almost everywhere
+\begin{equation}\label{eq:variable-chain}
+D(T_sf)(x)=\int_{B_1}\varphi(y)Df(x-s(x)y)
+\bigl(I-y\otimes Ds(x)\bigr)\dy,
+\end{equation}
+and
+\begin{equation}\label{eq:variable-shell}
+\int_A|D(T_sf)|^2\dx
+\le\frac{(1+L)^2}{1-L}\int_{A^+}|Df|^2\dx
+\le\frac{25}{12}\int_{A^+}|Df|^2\dx.
+\end{equation}
+On the region where $s=0$, we have $T_sf=f$ almost everywhere.
+\end{lemma}
+\begin{proof}
+For fixed $y\in B_1$, set $F_y(x)=x-s(x)y$. We have
+\[
+DF_y=I-y\otimes Ds,\qquad\det DF_y=1-Ds\cdot y\ge1-L>0,
+\]
+\[
+(1-L)|x-z|\le|F_y(x)-F_y(z)|\le(1+L)|x-z|.
+\]
+For each $z$, the equation $x=z+s(x)y$ has a unique solution by the contraction mapping theorem. Thus $F_y$ is a smooth bi-Lipschitz diffeomorphism of the whole space. It is the identity outside $B_{\theta+\delta}$, so $F_y(U)=U$. Also, $|F_y(x)-x|\le\bar h\le\delta$, and hence $F_y(A)\subset A^+$.
+
+For smooth Euclidean-valued $f$, direct differentiation gives \eqref{eq:variable-chain}. Jensen's inequality, $\norm{DF_y}\le1+L$, and change of variables give
+\begin{align*}
+\int_A|D(T_sf)|^2
+&\le(1+L)^2\int_{B_1}\varphi(y)
+\int_A|Df(F_y(x))|^2\dx\dy\\
+&\le\frac{(1+L)^2}{1-L}\int_{A^+}|Df(z)|^2\dd z.
+\end{align*}
+The same argument on the whole of $U$ gives
+\[
+\norm{T_sf}_{L^2(U)}^2\le(1-L)^{-1}\norm f_{L^2(U)}^2,
+\quad
+\norm{D(T_sf)}_{L^2(U)}^2
+\le\frac{(1+L)^2}{1-L}\norm{Df}_{L^2(U)}^2.
+\]
+Choose $f_j\in C^\infty(U,\R^q)$ converging in $\W(U)$ to $f$. The linear estimates above make $T_sf_j$ a Cauchy sequence in $\W(U)$; the $L^2$ estimate identifies its limit with the integral defining $T_sf$. The right-hand side of the derivative formula is also a bounded linear operator in $L^2$, so passage to the limit gives \eqref{eq:variable-chain} and \eqref{eq:variable-shell}. This uses only Euclidean-valued approximation and does not require $f_j$ to take values in $N$. Where $s=0$, the integral equals $f$.
+\end{proof}
+
+\begin{lemma}[Admissible competitor after projection]\label{lem:competitor}
+Under the assumptions of Lemma \ref{lem:variable}, suppose also that $u$ is locally energy minimizing on $B_1$, $E\le\eta$, $\bar h\le1/4$, and $\sqrt{C_0\eta}<\rho_N$. Then
+\[
+u_0=Q\circ T_su\in\W(U,N)
+\]
+holds almost everywhere, with $u_0=u_{\bar h}$ on $B_\theta$ and $u_0=u$ on $U\setminus B_{\theta+\delta}$, and
+\begin{equation}\label{eq:projected-shell}
+\int_A|Du_0|^2\dx\le\frac{25}{3}\int_{A^+}|Du|^2\dx.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:minimality-comparison}
+\int_{B_{\theta+\delta}}|Du|^2
+\le\int_{B_\theta}|Du_{\bar h}|^2+\frac{25}{3}\int_{A^+}|Du|^2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+For $s(x)>0$, we have $T_su(x)=m_{s(x)}(x)$. By \eqref{eq:tube-distance}, this lies in $U_{\rho_N}$ however small the positive scale is, so $Q(T_su)=\Pi(T_su)\in N$. Where $s=0$, we have $T_su=u\in N$ almost everywhere and $Q(u)=u$. Since $Q$ is smooth on the whole space with bounded derivatives, the Sobolev chain rule and Lemma \ref{lem:variable} give $u_0\in\W(U)$. On the attained values, $DQ=D\Pi$ has norm at most $2$, which proves \eqref{eq:projected-shell}.
+
+The two equalities follow directly from the definition of $s$. In particular, $u_0-u$ vanishes in $U$ throughout the outer annulus $\theta+\delta<|x|<\theta+2\delta$, so it belongs to $\Wo(U)$. Local minimality applies on the ball $U\Subset B_1$. Cancel the equal energies on this outer annulus and use \eqref{eq:projected-shell} to obtain \eqref{eq:minimality-comparison}. This also justifies gluing where the smoothing radius vanishes, without assuming that $u$ is already continuous.
+\end{proof}
+
+\section{One-step energy decay}\label{sec:decay}
+
+\begin{proposition}[Textbook Proposition 10.16]\label{prop:decay}
+There exist $\varepsilon_{\mathrm{dec}}>0$ and $\tau\in(0,1/8)$, depending only on $n,N$, such that any locally energy-minimizing map on $B_1$, say $u$, satisfies the following whenever $E\le\varepsilon_{\mathrm{dec}}$:
+\begin{equation}\label{eq:one-step}
+\tau^{2-n}\int_{B_\tau}|Du|^2\dx\le\frac12 E.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Introduce a small parameter $\eta\in(0,1)$ and assume $E\le\eta$. Set
+\begin{equation}\label{eq:parameters}
+\bar h=\eta^{1/4},\quad\delta=\eta^{1/8},\quad
+\gamma=\frac1{64(n-1)},\quad\tau=\eta^\gamma.
+\end{equation}
+All scales here depend on the uniform small-energy bound $\eta$, rather than the actual energy of an individual map. If $E=0$, Lemma \ref{lem:poincare} already implies that $u$ is constant and the conclusion is immediate. The argument below does not require division by $E$.
+
+Choose $\eta$ small enough that all of the following hold:
+\begin{equation}\label{eq:geometric-smallness}
+\sqrt{C_0\eta}<\rho_N,\quad\bar h\le1/4,\quad
+\delta\le1/8,\quad2\delta\le1/4,\quad
+2\tau<1/4,\quad\frac{\tau}{3\delta}\ge2.
+\end{equation}
+These conditions can be met simultaneously because $\gamma<1/8$, so $\tau/\delta\to\infty$ while $\tau,\delta,\bar h\to0$.
+
+Set $p=\lfloor\tau/(3\delta)\rfloor$ and consider the disjoint annuli
+\[
+A_i^+=\{x:\tau+3(i-1)\delta<|x|<\tau+3i\delta\},
+\qquad1\le i\le p.
+\]
+These annuli all lie in $\{\tau<|x|<2\tau\}$. Since $p\ge\tau/(6\delta)$, at least one index $j$ satisfies
+\begin{equation}\label{eq:good-shell}
+\int_{A_j^+}|Du|^2\dx\le\frac Ep\le6\frac\delta\tau E.
+\end{equation}
+Set $\theta=\tau+(3j-2)\delta$. Then
+\[
+A_j^+=\{\theta-\delta<|x|<\theta+2\delta\},\quad
+\tau<\theta<2\tau,\quad\theta+2\delta\le2\tau<1/4.
+\]
+
+Choose a smooth function $b\ge0$ with $\supp b\Subset(0,1)$, $\int b=1$, and $\norm b_\infty\le2$. Such a $b$ is obtained by convolving $2\mathbf1_{[1/4,3/4]}$ with a nonnegative smooth kernel of unit mass and sufficiently small support. Define
+\[
+\beta(t)=1-\int_{-\infty}^t b(s)\dd s,
+\qquad
+s(x)=\bar h\,\beta\bigl((|x|-\theta)/\delta\bigr).
+\]
+The function $s$ is constant near the origin, hence smooth on the whole space, and satisfies
+\[
+s=\bar h\text{ on }B_\theta,\qquad
+s=0\text{ on }\R^n\setminus B_{\theta+\delta},\qquad
+\norm{Ds}_\infty\le2\bar h/\delta=2\delta\le1/4.
+\]
+Since $\bar h=\delta^2\le\delta$, all assumptions of Section \ref{sec:gluing} hold. Combining \eqref{eq:minimality-comparison}, \eqref{eq:projected-energy}, and \eqref{eq:good-shell} gives
+\begin{align*}
+\tau^{2-n}\int_{B_\tau}|Du|^2
+&\le\tau^{2-n}\int_{B_{\theta+\delta}}|Du|^2\\
+&\le C\bigl(\tau^{2-n}\eta^{1/4}
++\tau^{2-n}\theta^n+\delta\tau^{1-n}\bigr)E\\
+&\le C_2\left(
+\eta^{1/4-\gamma(n-2)}+\eta^{2\gamma}
++\eta^{1/8-\gamma(n-1)}\right)E.
+\end{align*}
+Here $C_2$ is independent of $\eta,u$. For the chosen $\gamma$,
+\[
+\frac18-\gamma(n-1)=\frac7{64}\ge2\gamma,
+\qquad
+\frac14-\gamma(n-2)\ge\frac{15}{64}\ge2\gamma.
+\]
+Since $0<\eta<1$, it follows that
+\begin{equation}\label{eq:pre-decay}
+\tau^{2-n}\int_{B_\tau}|Du|^2\le3C_2\eta^{2\gamma}E.
+\end{equation}
+Reduce $\eta$ further so that $3C_2\eta^{2\gamma}\le1/2$. Denote this fixed choice by $\varepsilon_{\mathrm{dec}}$ and set $\tau=\varepsilon_{\mathrm{dec}}^\gamma$. This proves \eqref{eq:one-step}. For $n=2$, the same exponents and all estimates remain valid, without any expression dividing by $n-2$.
+\end{proof}
+
+\section{Iteration, changes of center, and the Hölder representative}
+
+\begin{lemma}[Rescaling and decay at all radii]\label{lem:iteration}
+Let $u\in\W_{\mathrm{loc}}(\Omega,N)$ be locally energy minimizing, let $B_s(x)\Subset\Omega$, and suppose $\Th_u(x,s)\le\varepsilon_{\mathrm{dec}}$. Set
+\begin{equation}\label{eq:alpha}
+\alpha=\frac{\log2}{2\log(1/\tau)}\in(0,1),
+\qquad\tau^{2\alpha}=\frac12.
+\end{equation}
+Then, for $0<r\le s$,
+\begin{equation}\label{eq:all-radii}
+\Th_u(x,r)\le2\left(\frac rs\right)^{2\alpha}\Th_u(x,s).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Set $u_{x,s}(z)=u(x+sz)$. The chain rule and change of variables give
+\[
+\int_{B_1}|Du_{x,s}|^2\dd z
+=s^{2-n}\int_{B_s(x)}|Du|^2\dx.
+\]
+Competitors with the same Sobolev trace on each subball correspond under this rescaling: linear rescaling identifies the corresponding $\Wo$ spaces, and the energies of both maps acquire the same positive factor $s^{n-2}$. Thus $u_{x,s}$ is still locally energy minimizing. Proposition \ref{prop:decay} gives
+\[
+\Th_u(x,\tau s)\le\tfrac12\Th_u(x,s).
+\]
+The right-hand side is at most $\varepsilon_{\mathrm{dec}}$, so the proposition can be applied again. Induction gives
+\[
+\Th_u(x,\tau^ks)\le2^{-k}\Th_u(x,s),\qquad k=0,1,\ldots.
+\]
+Given $r$, choose $k\ge0$ with $\tau^{k+1}s\le r\le\tau^ks$. By monotonicity,
+\[
+\Th_u(x,r)\le\Th_u(x,\tau^ks)
+\le2^{-k}\Th_u(x,s)
+\le2(r/s)^{2\alpha}\Th_u(x,s).
+\]
+The last step uses $2^{-k}=2(\tau^{k+1})^{2\alpha}$. Since $\tau<1/8$, the value of $\alpha$ in \eqref{eq:alpha} lies in $(0,1)$.
+\end{proof}
+
+\begin{lemma}[The required Morrey argument]\label{lem:morrey}
+Let $f\in\W(B_1,\R^q)$ and $0<\alpha<1$, and suppose that some $M\ge0$ satisfies, for every $x\in B_{1/2}$ and $0<r\le1/2$,
+\begin{equation}\label{eq:morrey-assumption}
+\int_{B_r(x)}|Df|^2\dx\le M r^{n-2+2\alpha}.
+\end{equation}
+Then $f$ has a unique continuous representative on $B_{1/2}$, denoted by $\widetilde f$, and
+\begin{equation}\label{eq:morrey-conclusion}
+[\widetilde f]_{C^{0,\alpha}(B_{1/2})}
+\le C(n,\alpha)\sqrt M.
+\end{equation}
+If $f\in N$ almost everywhere and $N$ is closed, then $\widetilde f\in N$ everywhere.
+\end{lemma}
+\begin{proof}
+Write $f_{x,r}=\avint_{B_r(x)}f$. Poincaré and \eqref{eq:morrey-assumption} give
+\begin{equation}\label{eq:mean-oscillation}
+\int_{B_r(x)}|f-f_{x,r}|^2\dx
+\le C_PM r^{n+2\alpha}.
+\end{equation}
+Hence
+\[
+|f_{x,r/2}-f_{x,r}|
+\le|B_{r/2}|^{-1/2}\left(\int_{B_r(x)}|f-f_{x,r}|^2\right)^{1/2}
+\le C\sqrt M r^\alpha.
+\]
+Summing a geometric series shows that $f_{x,2^{-k}r}$ converges for each $x$, and its limit satisfies
+\begin{equation}\label{eq:mean-limit}
+|\widetilde f(x)-f_{x,r}|\le C(n,\alpha)\sqrt M r^\alpha.
+\end{equation}
+To see that the limit is independent of the initial radius, suppose $2^{-k-1}r<t\le2^{-k}r$. Comparing the two ball averages and applying \eqref{eq:mean-oscillation} gives
+\[
+|f_{x,t}-f_{x,2^{-k}r}|\le C\sqrt M(2^{-k}r)^\alpha.
+\]
+Thus the averages for all $t\downarrow0$ converge to the same limit. The Lebesgue differentiation theorem shows that this limit equals $f$ almost everywhere.
+
+For $x,y\in B_{1/2}$ with $x=y$, the Hölder estimate is immediate. First suppose $0<d=|x-y|\le1/8$. Both $B_{2d}(x),B_{2d}(y)$ lie in $B_{3d}(x)$. Comparing their averages separately with $f_{x,3d}$ and using \eqref{eq:mean-oscillation} gives
+\[
+|f_{x,2d}-f_{y,2d}|\le C\sqrt M d^\alpha.
+\]
+Equation \eqref{eq:mean-limit} then gives
+\[
+|\widetilde f(x)-\widetilde f(y)|\le C\sqrt M|x-y|^\alpha.
+\]
+If $d>1/8$, divide the segment joining the points, which lies in the convex ball $B_{1/2}$, into at most $8$ equal pieces of length at most $1/8$. Summation gives the same estimate, with an additional factor depending only on $\alpha$. The limit representative is therefore Hölder continuous. Two continuous representatives that agree almost everywhere agree everywhere by continuity.
+
+Finally, if $f$ takes values in the closed set $N$ almost everywhere, then
+\[
+\dist(f_{x,r},N)^2\le\avint_{B_r(x)}|f-f_{x,r}|^2\le CM r^{2\alpha}.
+\]
+Using \eqref{eq:mean-limit} and letting $r\downarrow0$ gives $\dist(\widetilde f(x),N)=0$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{thm:main}]
+First take $a=0,R=1$ and set
+\begin{equation}\label{eq:threshold-main}
+\varepsilon_{\mathrm{reg}}=2^{2-n}\varepsilon_{\mathrm{dec}}.
+\end{equation}
+For every $x\in B_{1/2}$, we have $B_{1/2}(x)\Subset B_1$, and
+\[
+\Th_u(x,1/2)=2^{n-2}\int_{B_{1/2}(x)}|Du|^2
+\le2^{n-2}E\le\varepsilon_{\mathrm{dec}}.
+\]
+Lemma \ref{lem:iteration} gives, for $0<r\le1/2$,
+\[
+\int_{B_r(x)}|Du|^2
+=r^{n-2}\Th_u(x,r)
+\le2^{n-1+2\alpha}E\,r^{n-2+2\alpha}.
+\]
+Lemma \ref{lem:morrey}, with $M=2^{n-1+2\alpha}E$, gives
+\[
+[\widetilde u]_{C^{0,\alpha}(B_{1/2})}\le C\sqrt E,
+\qquad\widetilde u(B_{1/2})\subset N.
+\]
+For general $a,R$, apply the rescaling $u_{a,R}(z)=u(a+Rz)$. Its unit-ball energy is $\Th_u(a,R)$, and the Hölder seminorm scales by $R^{-\alpha}$. This gives \eqref{eq:holder-main} and completes the proof.
+\end{proof}
+
+\section{Correspondence with the textbook and corrections}
+
+The source is Section 10.3.1 of Giaquinta--Martinazzi \cite{GM}, printed pages 241--249 (PDF pages 243--251 in the project copy). Lemma \ref{lem:mollifier} corresponds to Step 1 in the proof of the textbook's Proposition 10.16, Lemma \ref{lem:harmonic} to Step 2, and Sections \ref{sec:gluing}--\ref{sec:decay} to Steps 3--4. The final iteration corresponds to the proof of the textbook's Theorem 10.15.
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Consistent smoothing scale.} On printed page 245 the textbook chooses $\bar h=\varepsilon_0^{1/(2n)}$, whereas on page 247 it uses
+\[
+2\bar h\varepsilon_0^{-1/8}=2\varepsilon_0^{1/8}.
+\]
+This identity requires $\bar h=\varepsilon_0^{1/4}$, which is inconsistent with the earlier choice in general dimension. We first use monotonicity to improve the rough bound $|Dm_h|^2\le C\eta h^{-n}$ to $|Dm_h|^2\le C\eta h^{-2}$, and then consistently choose $\bar h=\eta^{1/4}$. This retains the textbook's oscillation order $\eta^{1/4}$ and is compatible with gluing across an annulus of thickness $\delta=\eta^{1/8}$. This is an explicit correction of the source argument.
+\item \textbf{Sign of the weak equation.} With the textbook convention $\Delta u+\sum_jA_u(\partial_ju,\partial_ju)=0$, convolution should give $\Delta m_h=-\varphi_h*\sum_jA_u(\partial_ju,\partial_ju)$. The positive sign in the displayed equation of Step 2 does not affect the subsequent absolute-value estimate. We use the projection Hessian convention in \eqref{eq:weak-euler} and keep the signs consistent throughout.
+\item \textbf{Scale range and dimension.} We explicitly require $2\tau<1/4$ so that the earlier estimates apply on the chosen annulus. The parameter choice \eqref{eq:parameters} is also defined for $n=2$, without the source's use of $(n-2)^{-1}$. Constants may depend on the domain dimension $n$; the textbook treats $n$ as fixed.
+\item \textbf{Variable smoothing and zero scale.} The derivative retains the full matrix factor $I-y\otimes Ds$. The Jacobian is controlled explicitly by $1-Ds\cdot y$. We first prove the formula for smooth Euclidean-valued functions and then pass to Sobolev maps using bounded linear operator estimates. At $s=0$ the smoothed map is defined to equal the original map. A Euclidean-valued extension of the projection permits use of the chain rule, and equality on an outer annulus of a larger ball verifies the competitor's trace.
+\item \textbf{Meaning of the theorem.} The domain ball always satisfies $B_R(a)\Subset\Omega$. Continuity refers to a continuous representative of the Sobolev map, and the target conclusion is Hölder continuity. The small-energy threshold is explicitly reduced when changing the center, after which uniform estimates hold at all centers and all small radii.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{GM}
+Mariano Giaquinta and Luca Martinazzi,
+\emph{An Introduction to the Regularity Theory for Elliptic Systems, Harmonic Maps and Minimal Graphs},
+second edition, Chapter 10, Section 10.3.1, pp. 241--249.
+The text was checked against the PDF supplied in the project. Sobolev foundations are in Chapter 3; the Morrey and linear harmonic estimates are in Chapter 5.
+\bibitem{SU}
+Richard Schoen and Karen Uhlenbeck,
+\emph{A regularity theory for harmonic maps},
+Journal of Differential Geometry \textbf{17} (1982), 307--335.
+\href{https://doi.org/10.4310/jdg/1214436923}{doi:10.4310/jdg/1214436923}.
+The proof version used here is taken directly from \cite{GM}; we do not retranscribe the full argument of \cite{SU}.
+\end{thebibliography}
+\end{document}
