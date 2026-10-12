@@ -23,7 +23,7 @@ everywhere and locally minimize Dirichlet energy among $N$-valued competitors
 whose difference from $u$ belongs to $W^{1,2}_0$ on the comparison ball. Set
 
 $$
-E(u;B)=\int_B |Du|_{\mathrm{HS}}^2\,dx,
+E(u;B)=\int_B |Du|_{\mathrm{HS}}^2 dx,
 \qquad
 \Theta_u(a,r)=r^{2-n}E(u;B_r(a)).
 $$
@@ -47,7 +47,7 @@ a unique continuous representative $w$ of $u$ on $B_{R/2}(a)$, with values
 in $N$, satisfying
 
 $$
-|w(x)-w(y)|\le C R^{-\alpha}\sqrt{\Theta_u(a,R)}\,|x-y|^\alpha
+|w(x)-w(y)|\le C R^{-\alpha}\sqrt{\Theta_u(a,R)} |x-y|^\alpha
 \qquad(x,y\in B_{R/2}(a)).
 $$
 
