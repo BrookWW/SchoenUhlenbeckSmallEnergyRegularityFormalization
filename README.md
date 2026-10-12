@@ -1,5 +1,7 @@
 # Schoen–Uhlenbeck small-energy regularity, formalized in Lean 4
 
+[![Build and verify](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/build.yml)
+
 A Lean 4 formalization of quantitative small-energy Hölder regularity for
 locally energy-minimizing harmonic maps into a compact smooth embedded target.
 The proof follows Giaquinta–Martinazzi, Section 10.3.1: smoothing, harmonic
@@ -245,6 +247,12 @@ All declaration names below are in namespace `HarmonicMaps`.
 | Arbitrary-ball assembly | [Analysis/GeneralBallRegularity](HarmonicMaps/Analysis/GeneralBallRegularity.lean) |
 
 ## Building and checking
+
+[GitHub Actions](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/build.yml)
+runs the full build and both verification scripts on Ubuntu for pushes to
+`main` and pull requests. It also supports manual runs. The workflow installs
+the pinned Lean toolchain, downloads the Mathlib cache, and checks that the
+committed dependency files remain unchanged.
 
 The project pins **Lean 4.32.2** and Mathlib commit
 `905b95818eb32af7874a58b427f50c1711a5e96c`. With `elan` and Python 3 installed:
