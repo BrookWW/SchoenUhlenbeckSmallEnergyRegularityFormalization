@@ -12,8 +12,10 @@ the same map, target and displayed weak gradient throughout.
 A gradient is a family of coordinate columns. Its native Pi norm differs from
 its Hilbert–Schmidt norm; energy is the actual sum of squared column norms:
 
-$$E(u;B)=\int_B\sum_{i=1}^n|D_i u|^2,\qquad
-\Theta_u(a,R)=R^{2-n}E(u;B_R(a)).$$
+```math
+E(u;B)=\int_B\sum_{i=1}^n|D_i u|^2,\qquad
+\Theta_u(a,R)=R^{2-n}E(u;B_R(a)).
+```
 
 Higher derivative bounds use native multilinear operator norms. The forcing
 sign is $\Delta u=F$, expressed weakly by
@@ -55,14 +57,18 @@ The upgrade manuscript is
 projection provides a fixed smooth quadratic coefficient $A$, with the signed
 weak equation
 
-$$\Delta w=F,\qquad F=\sum_i A(w)[D_iw,D_iw].$$
+```math
+\Delta w=F,\qquad F=\sum_i A(w)[D_iw,D_iw].
+```
 
 A continuous Sobolev harmonic replacement has the original boundary data,
 a genuine zero-boundary difference and coefficient-one energy orthogonality.
 If $[w]_\alpha\le H$ and $|F|\le K|Dw|_{\mathrm{HS}}^2$, the difference obeys
 
-$$\int_{B_r}|D(w-h)|_{\mathrm{HS}}^2
-\le2KH r^\alpha\int_{B_r}|Dw|_{\mathrm{HS}}^2.$$
+```math
+\int_{B_r}|D(w-h)|_{\mathrm{HS}}^2
+\le2KH r^\alpha\int_{B_r}|Dw|_{\mathrm{HS}}^2.
+```
 
 Smooth approximation and signed weak Poisson mollification establish this
 identity and estimate for the original rough gradient. The comparison gives
@@ -108,16 +114,20 @@ on a convex ball.
 
 For $m\ge1$, use
 
-$$s_m=\frac12+\frac18\,2^{-(m-1)}.$$
+```math
+s_m=\frac12+\frac18\,2^{-(m-1)}.
+```
 
 The same map has $C^{m,\gamma}$ control on $B_{s_m}$. Its coordinate derivatives
 of order $m-1$ satisfy the differentiated signed weak equations with genuine
 C1 Sobolev data. Nested-radius Schauder estimates and finite
 coordinate-to-operator reconstruction give the next order with
 
-$$\|w-w(0)\|_{C^{m+1,\gamma}(B_{s_{m+1}})}
+```math
+\|w-w(0)\|_{C^{m+1,\gamma}(B_{s_{m+1}})}
 \le S_m(M_m\delta+P_m\delta^2)
-\le S_m(M_m+P_m)\delta.$$
+\le S_m(M_m+P_m)\delta.
+```
 
 The recursive constants include all lower-order bounds and are fixed before
 the map and its energy.
@@ -129,15 +139,17 @@ all the actual derivative bounds.
 
 The forward and inverse affine maps preserve Sobolev data, target membership,
 all local competitors and the displayed weak gradient. At radius $R$,
-$E(u(a+R\,\cdot);B_1)=\Theta_u(a,R)$. A slightly larger contained closed ball
+$`E(u(a+R\,\cdot);B_1)=\Theta_u(a,R)`$. A slightly larger contained closed ball
 provides the open domain needed by the unit argument while the dilation stays
 at the original $R$.
 
 For the same smooth representative, inverse affine differentiation gives
 $D^kw(x)=R^{-k}D^k\widetilde w((x-a)/R)$ and
 
-$$[D^kw]_{\gamma;B_{R/2}(a)}
-=R^{-(k+\gamma)}[D^k\widetilde w]_{\gamma;B_{1/2}}.$$
+```math
+[D^kw]_{\gamma;B_{R/2}(a)}
+=R^{-(k+\gamma)}[D^k\widetilde w]_{\gamma;B_{1/2}}.
+```
 
 `HolderToCK.holderSeminorm` is the extended nonnegative supremum of the actual
 quotients over distinct pairs. Unbounded quotients give infinity. Its finite

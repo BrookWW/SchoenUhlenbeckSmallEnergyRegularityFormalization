@@ -8,7 +8,7 @@ public import HarmonicMaps.SobolevRestriction
 
 /-! # Uniform Holder representatives on an enlarged inner ball
 
-The pinned half-ball representative theorem is applied on quarter-radius
+The HarmonicMaps half-ball representative theorem is applied on quarter-radius
 balls. Open-overlap uniqueness and countable gluing preserve the original
 map and its displayed weak gradient.
 -/

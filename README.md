@@ -28,11 +28,11 @@ $u\in W^{1,2}_{\mathrm{loc}}(\Omega,\mathbb R^q)$ take values in $N$ almost
 everywhere and locally minimize Dirichlet energy among $N$-valued competitors
 whose difference from $u$ belongs to $W^{1,2}_0$ on each comparison ball. Set
 
-$$
+```math
 E(u;B)=\int_B |Du|_{\mathrm{HS}}^2\,dx,
 \qquad
 \Theta_u(a,R)=R^{2-n}E(u;B_R(a)).
-$$
+```
 
 Energy has **no factor of $1/2$**. Higher derivatives use ambient multilinear
 operator norms. The displayed weak gradient is retained in Sobolev membership,
@@ -40,23 +40,23 @@ the equation and the energy.
 
 **Smooth small-energy regularity.** There are $\varepsilon\gt0$,
 $0\lt\gamma\lt1$, and one sequence $C_0,C_1,\ldots$ of finite nonnegative
-constants, depending only on $n,N$ and the derivative order, such that
+constants, depending only on $n,N$ (and, for $C_k$, on $k$), such that
 $\overline{B_R(a)}\subset\Omega$ and $\Theta_u(a,R)\le\varepsilon$ imply a
 unique continuous representative $w$ on $B_{R/2}(a)$ with values in $N$.
 This representative is smooth and satisfies
 
-$$
+```math
 \sup_{B_{R/2}(a)} |w-w(a)|\le C_0\sqrt{\Theta_u(a,R)},
-$$
+```
 
-$$
+```math
 \begin{aligned}
 R^k\sup_{B_{R/2}(a)}\|D^kw\|
 &\le C_k\sqrt{\Theta_u(a,R)},\\
 R^{k+\gamma}[D^kw]_{\gamma;B_{R/2}(a)}
 &\le C_k\sqrt{\Theta_u(a,R)},\qquad k\ge1.
 \end{aligned}
-$$
+```
 
 The threshold, exponent and entire constant sequence are chosen before the
 domain, map, weak gradient, center, radius and derivative order. Every order
@@ -88,10 +88,19 @@ public import HarmonicMaps.Regularity
 ```
 
 The complete smooth theorem is in namespace `HolderToCK`, in
-[SmallEnergySmoothRegularity.lean](HolderToCK/Frozen/SmallEnergySmoothRegularity.lean):
+[SmallEnergySmoothRegularity.lean](HolderToCK/Frozen/SmallEnergySmoothRegularity.lean).
+The following standalone example checks its complete interface using the
+public theorem.
 
 ```lean
-theorem smallEnergySmoothRegularity
+module
+public import HarmonicMaps.Regularity
+
+open HarmonicMaps MeasureTheory Set HolderToCK
+open scoped NNReal ENNReal ContDiff
+set_option autoImplicit false
+
+example
     {n q : ℕ} (hn : 2 ≤ n) (N : CompactSmoothEmbeddedTarget q) :
     ∃ ε γ : ℝ, ∃ C : ℕ → ℝ≥0,
       0 < ε ∧ 0 < γ ∧ γ < 1 ∧
@@ -123,8 +132,7 @@ theorem smallEnergySmoothRegularity
               IsContinuousRepresentative (ballDomain a (R.val / 2)) u
                 (fun x => v x.val) →
               Set.EqOn v w (Metric.ball a (R.val / 2)) :=
-by exact HolderToCK.Providers.SmallEnergySmoothRegularity.result hn N
-
+by exact HolderToCK.smallEnergySmoothRegularity hn N
 ```
 
 `Domain n` and `Ambient q` are Euclidean spaces. `Du` is the displayed weak
@@ -282,9 +290,9 @@ bootstrap.
 
 The project pins **Lean 4.32.2** and Mathlib commit
 `905b95818eb32af7874a58b427f50c1711a5e96c`. Mathlib is the sole directly declared
-external Lake dependency. Both mathematical libraries belong to this package and are maintained together
-in this repository. Mathematical interfaces and their verification baselines
-are reviewed and updated here.
+external Lake dependency. Both mathematical libraries belong to this package
+and are maintained together in this repository. Mathematical interfaces and
+their verification baselines are reviewed and updated here.
 With `elan` and Python 3.9 or later installed:
 
 ```sh
