@@ -56,6 +56,8 @@ FORBIDDEN_TOKENS = {
 def scan_sources():
     paths = [PROJECT / "HarmonicMaps.lean"]
     paths += sorted((PROJECT / "HarmonicMaps").rglob("*.lean"))
+    paths += [PROJECT / "HolderToCK.lean"]
+    paths += sorted((PROJECT / "HolderToCK").rglob("*.lean"))
     if len(paths) < 2 or not paths[0].is_file():
         raise ValueError("Mathematical Lean sources are missing.")
     violations = []
@@ -98,6 +100,8 @@ def main():
             raise ValueError(f"Disallowed axioms for {name}: {', '.join(sorted(unexpected))}")
         print("AXIOMS OK", name, ", ".join(sorted(axioms)) or "none")
     print(f"AXIOM CHECK PASS: {len(names)} theorem dependency closures")
+    import check_upgrade_axioms
+    check_upgrade_axioms.main()
 
 
 if __name__ == "__main__":

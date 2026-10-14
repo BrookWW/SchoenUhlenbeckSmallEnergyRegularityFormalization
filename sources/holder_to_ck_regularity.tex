@@ -1,0 +1,884 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{microtype}
+\setlength{\parskip}{0.35em}
+\setlist{nosep}
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\dx}{\dd x}
+\newcommand{\dy}{\dd y}
+\newcommand{\dz}{\dd z}
+\newcommand{\avint}{\mathop{\fint}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\E}{\mathcal E}
+\newcommand{\Th}{\Theta}
+\newcommand{\osc}{\operatorname{osc}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\PV}{\operatorname{p.v.}}
+\title{From H\"older representatives to quantitative smooth regularity\\
+\large A complete interior upgrade for energy-minimizing harmonic maps}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove that the quantitative small-energy H\"older representative theorem
+for locally energy-minimizing harmonic maps implies smoothness and estimates
+for every positive-order ambient derivative. The energy normalization is
+\(\int |Du|_{\mathrm{HS}}^2\), without a factor of one half. A single energy
+threshold works for all derivative orders. The proof first treats the weak
+quadratic equation by harmonic replacement, improves energy growth, derives
+gradient Campanato decay, and identifies the continuous weak gradient with
+the classical derivative. A constant-coefficient Poisson Schauder estimate is
+proved using the fundamental solution and its cancellation, rather than
+assumed. Differentiating the smooth coefficient equation then gives all
+higher estimates on nested balls. The endpoint is interior regularity on
+Euclidean domains; no claim about boundary regularity is made.
+\end{abstract}
+
+\section{Local data, representatives, and the quantitative target}
+\label{sec:local}
+
+Fix \(n\ge2\) and a nonempty compact smooth embedded submanifold
+\(N\subset\R^q\), without boundary. The metric on \(N\) is induced by the
+ambient Euclidean inner product. Balls are open unless explicitly stated
+otherwise. The norm of \(Du\) in energy integrals is the Hilbert--Schmidt
+norm; the norms of \(D^j u\), \(j\ge1\), are multilinear operator norms.
+These norms are equivalent to their finite coordinate norms, with constants
+depending only on \(n,q,j\). For a continuous function \(v\) on \(U\), write
+\[
+ [v]_{\eta;U}=\sup_{x\ne y\in U}
+ \frac{|v(x)-v(y)|}{|x-y|^\eta},\qquad 0<\eta<1.
+\]
+For functions with \(m\) continuous derivatives define
+\[
+ \norm{v}_{C^{m,\eta}(U)}
+ =\sum_{j=0}^m\sup_U\norm{D^jv}+[D^mv]_{\eta;U}.
+\]
+All uses of these norms below concern relatively compact balls, where the
+displayed quantities are finite after the corresponding estimate is proved.
+
+An ambient Sobolev map is \(u\in W^{1,2}_{\mathrm{loc}}(\Omega,\R^q)\)
+with its displayed distributional gradient \(Du\), and \(u\in N\) almost
+everywhere. Local minimality means
+\[
+ \int_{B_r(b)}|Du|^2\le\int_{B_r(b)}|Dv|^2
+ \quad\text{if }\overline{B_r(b)}\subset\Omega,
+ \quad v\in W^{1,2}(B_r(b),N),\quad v-u\in W^{1,2}_0(B_r(b),\R^q).
+\]
+Here \(W^{1,2}_0\) is the closure of smooth compactly supported maps in
+the function-and-gradient \(L^2\) norm. Define
+\[
+ \E(u;B)=\int_B |Du|^2,\qquad
+ \Th_u(a,R)=R^{2-n}\E(u;B_R(a)).
+\]
+
+\begin{theorem}[Quantitative smooth small-energy regularity]
+\label{thm:main}
+There are \(\varepsilon_*>0\), \(\gamma\in(0,1)\), and numbers
+\(C_j<\infty\), \(j\ge1\), depending only on \(n,N\) (and on \(j\)
+for \(C_j\)), with the following property. Suppose \(u\) is locally energy
+minimizing, \(\overline{B_R(a)}\subset\Omega\), and
+\(\Th_u(a,R)\le\varepsilon_*\). The unique continuous representative
+\(w\) on \(B_{R/2}(a)\) takes values in \(N\), is smooth, and satisfies
+\begin{equation}\label{eq:main}
+ \begin{aligned}
+ R^j\sup_{B_{R/2}(a)}\norm{D^jw}
+ &\le C_j\Th_u(a,R)^{1/2},\\
+ R^{j+\gamma}[D^jw]_{\gamma;B_{R/2}(a)}
+ &\le C_j\Th_u(a,R)^{1/2},\qquad j\ge1.
+ \end{aligned}
+\end{equation}
+It also satisfies
+\begin{equation}\label{eq:zero}
+ \sup_{B_{R/2}(a)}|w-w(a)|\le C_0\Th_u(a,R)^{1/2}
+\end{equation}
+for a constant depending only on \(n,N\). The sum of the two scaled
+positive-order quantities is consequently bounded by
+\(2C_j\Th_u(a,R)^{1/2}\). The threshold is selected before
+the map, domain, center, radius, and derivative order. Uniqueness concerns
+the representative on the indicated ball.
+\end{theorem}
+
+\begin{remark}
+The zero-order bound concerns \(w-w(a)\). A nonzero constant map has zero
+energy, so a bound for the uncentered full \(C^j\) norm by
+\(C_j\Th^{1/2}\) would be false. Ambient total functions may be used to
+represent maps in a proof assistant, but all equality, smoothness, and
+derivative assertions in this theorem are restricted to the open ball.
+\end{remark}
+
+We use the already established H\"older theorem \cite{Holder}: there are
+\(\varepsilon_H>0\), \(\alpha\in(0,1)\), and \(C_H\), depending only on
+\(n,N\), such that small normalized energy on a compactly contained ball
+gives a unique \(N\)-valued representative on its half-ball, with
+\[
+ [w]_{\alpha;B_{s/2}(b)}
+ \le C_Hs^{-\alpha}\Th_u(b,s)^{1/2}.
+\]
+The other inputs from that development are the genuine weak equation,
+smooth nearest-point projection and its smooth Euclidean extension,
+Euclidean Sobolev mollification, the smooth-data Poisson solution on a ball,
+and its signed Green and energy-orthogonality identities. They are
+foundational inputs, not assumptions about the higher regularity of \(u\).
+The new elliptic regularity arguments are proved in this note.
+
+\begin{lemma}[Uniform H\"older data on an enlarged inner ball]
+\label{lem:localholder}
+Suppose the unit-ball energy is \(E\), and
+\(E\le4^{2-n}\varepsilon_H\). There is an \(N\)-valued continuous
+representative on \(B_{3/4}\) such that
+\begin{equation}\label{eq:holderinput}
+ [w]_{\alpha;B_{3/4}}\le L\sqrt E,
+ \qquad \int_{B_{3/4}}|Dw|^2\le E,
+\end{equation}
+where \(Dw\) in the second expression initially means the same weak
+gradient as \(Du\), and \(L\) depends only on \(n,N\).
+\end{lemma}
+\begin{proof}
+For \(x\in B_{3/4}\), the closed ball of radius \(1/4\) centered at \(x\)
+lies in \(B_1\), and its normalized energy is at most \(4^{n-2}E\).
+Apply the H\"older theorem on this ball. Its representative on \(B_{1/8}(x)\)
+has seminorm at most
+\(L_0\sqrt E\), where \(L_0=C_H4^{\alpha+(n-2)/2}\).
+Representatives agree on overlaps: their difference is continuous and zero
+almost everywhere on an open set, and every nonempty Euclidean open ball
+has positive measure. Thus they glue. A countable subcover exists by second
+countability, so the glued function agrees almost everywhere with \(u\);
+no uncountable union of exceptional null sets is used.
+For \(x,y\in B_{3/4}\), divide their segment into 24 equal parts. Every
+part has length less than \(1/16\), and lies in a ball \(B_{1/8}\) centered
+at its initial point. Summing the local estimates gives
+\(L=24^{1-\alpha}L_0\). The equality of weak gradients follows from
+distributional almost-everywhere invariance and uniqueness; restriction
+of the energy gives the second bound.
+\end{proof}
+
+Let \(\Pi\) be the nearest-point projection on a fixed tubular neighborhood.
+Choose a smooth Euclidean extension \(Q:\R^q\to\R^q\) agreeing with
+\(\Pi\) near \(N\), and put
+\begin{equation}\label{eq:coefficient}
+ A(z)[v,t]=D^2Q(z)[v,t].
+\end{equation}
+At target points this equals the canonical projection Hessian, since
+the two maps agree on a neighborhood. The established outer-variation
+equation gives, on \(B_{3/4}\),
+\begin{equation}\label{eq:weak}
+ \Delta w=F,\qquad
+ F=\sum_{i=1}^n A(w)[D_iw,D_iw],\qquad |F|\le K|Dw|^2
+\end{equation}
+almost everywhere, with \(K<\infty\) depending only on \(N\). Precisely,
+for every smooth compactly supported vector test \(\psi\),
+\[
+ \int Dw:D\psi=-\int F\cdot\psi.
+\]
+The right side is integrable because \(F\in L^1_{\mathrm{loc}}\) and the
+test is bounded. This sign convention is used in every Green identity.
+
+\section{Harmonic replacement and the weak quadratic equation}
+\label{sec:comparison}
+
+We first record the harmonic estimates needed below, including their scaling.
+For a smooth harmonic vector map \(h\) on \(B_r(x)\),
+\begin{align}
+ \int_{B_{\theta r}(x)}|Dh|^2
+ &\le c_n\theta^n\int_{B_r(x)}|Dh|^2,
+ \label{eq:henergy}\\
+ \int_{B_{\theta r}(x)}|Dh-(Dh)_{x,\theta r}|^2
+ &\le c_n\theta^{n+2}\int_{B_r(x)}|Dh-(Dh)_{x,r}|^2,
+ \label{eq:hexcess}
+\end{align}
+for \(0<\theta\le1/2\). Here a subscript \((x,r)\) denotes a ball mean.
+To see all derivative estimates used in these inequalities, choose a smooth
+radial kernel \(\zeta\) supported in \(B_1\), of integral one. The ball
+mean-value formula, integrated against its radial profile, gives
+\(h=\zeta_s*h\) whenever the sampling ball is contained in the harmonic
+domain. Differentiating the kernel and using Cauchy--Schwarz gives
+\begin{equation}\label{eq:hderivatives}
+ \sup_{B_{r/2}(x)}\norm{D^jh}
+ \le c_{n,j}r^{-j-n/2}\norm{h}_{L^2(B_r(x))}.
+\end{equation}
+The same argument with an \(L^1\) or supremum bound gives the corresponding
+interior estimates. Apply the mean-value formula to derivative columns for
+\eqref{eq:henergy}. For \eqref{eq:hexcess}, apply
+\eqref{eq:hderivatives} with \(j=1\) to the harmonic field
+\(Dh-(Dh)_{x,r}\), then integrate its Lipschitz oscillation on the smaller
+ball. All finite-coordinate/operator-norm conversions enter \(c_n\).
+
+\begin{lemma}[Harmonic replacement for a continuous Sobolev datum]
+\label{lem:replacement}
+Let \(\overline{B_r(x)}\subset B_{3/4}\). There is
+\(h\in W^{1,2}(B_r(x),\R^q)\cap C(\overline{B_r(x)},\R^q)\),
+smooth and harmonic in the open ball, with boundary value \(w\), such that
+\(w-h\in W^{1,2}_0(B_r(x),\R^q)\),
+\begin{equation}\label{eq:orthogonal}
+ \int_{B_r(x)}|Dw|^2
+ =\int_{B_r(x)}|Dh|^2+\int_{B_r(x)}|Dw-Dh|^2,
+\end{equation}
+and, if \([w]_{\alpha;B_{3/4}}\le H\),
+\begin{equation}\label{eq:error}
+ \int_{B_r(x)}|Dw-Dh|^2
+ \le 2KHr^\alpha\int_{B_r(x)}|Dw|^2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Fix a slightly larger compactly contained ball. Mollify the continuous
+Sobolev map in this larger ball by a nonnegative smooth unit-mass kernel
+supported at radius \(t\), obtaining \(w_t\). Local convolution gives
+uniform convergence on the closed ball, strong function-and-gradient
+\(L^2\) convergence, and
+\begin{equation}\label{eq:mollpoisson}
+ \Delta w_t=F_t,\qquad
+ \int_{B_r(x)}|F_t|\le K\int_{B_{r+t}(x)}|Dw|^2.
+\end{equation}
+For the Laplacian identity, gradient commutation first gives
+\(D_iw_t(x)=\int\varphi_t(x-y)D_iw(y)\dy\).
+Differentiate the smooth kernel in \(x_i\) and sum over \(i\).
+In the weak Poisson equation use the vector test
+\(\psi(y)=\varphi_t(x-y)e_j\). Its derivative in \(y_i\) is
+\(-D_i\varphi_t(x-y)e_j\), so the two negative signs in the signed test
+identity cancel and give the \(j\)-th component of
+\(\Delta w_t=\varphi_t*F\). The kernel support is compactly contained
+in the domain, and local integrability supplies all these pairings.
+Jensen's inequality and Fubini give the displayed forcing integral bound.
+The other assertions follow by the weak-gradient test identities and
+translation continuity in \(L^2\). A cutoff in the larger ball can make the convolutions
+global without changing them on the closed ball under consideration.
+
+Let \(h_t\) be the smooth-data Poisson solution with boundary value
+\(w_t\). It is smooth up to this boundary, harmonic inside, and its
+difference from \(w_t\) has zero Sobolev boundary values. For completeness,
+the latter follows without an assumed trace theorem: multiply the smooth
+zero-boundary difference by cutoffs vanishing in a collar of thickness
+\(s\). Its magnitude is bounded by a constant times distance to the sphere;
+therefore the cutoff-gradient contribution has squared integral bounded
+by a constant times the collar volume, which tends to zero. The remaining
+function and gradient errors tend to zero by dominated convergence. The
+cutoff products are smooth and compactly supported in the ball.
+
+Energy orthogonality for smooth data gives \eqref{eq:orthogonal} for
+\(w_t,h_t\). Applied to the harmonic difference \(h_t-h_s\), it also gives
+\[
+ \norm{Dh_t-Dh_s}_{L^2(B_r(x))}
+ \le\norm{Dw_t-Dw_s}_{L^2(B_r(x))}.
+\]
+The Poisson probability kernel bounds
+\(\sup|h_t-h_s|\) by the boundary supremum of \(|w_t-w_s|\).
+Consequently \(h_t\) converges uniformly on the closed ball and its
+gradients converge strongly in \(L^2\). Passing distributional pairings
+to the limit identifies these gradients with those of the limit \(h\).
+The differences \(w_t-h_t\) converge in the Sobolev graph norm, so their
+limit belongs to the same closed zero-boundary space. Uniform convergence
+preserves the boundary value. Passing the mean-value identity to the
+uniform limit gives the identity for \(h\); the local radial-kernel formula
+then proves its interior smoothness and harmonicity. Strong gradient
+convergence proves \eqref{eq:orthogonal}.
+
+The signed Green identity for the smooth pair is
+\[
+ \int_{B_r(x)}|Dw_t-Dh_t|^2
+ =-\int_{B_r(x)}F_t\cdot(w_t-h_t).
+\]
+The oscillation of \(w_t\) around \(w(x)\) is at most
+\(H(r+t)^\alpha\); the Poisson maximum estimate therefore gives
+\(\sup|w_t-h_t|\le2H(r+t)^\alpha\). It follows that the error energy is
+at most
+\(2KH(r+t)^\alpha\int_{B_{r+t}(x)}|Dw|^2\).
+The last integral converges to the integral over \(B_r(x)\): decreasing
+closed-radius neighborhoods converge to the closed ball, the sphere has
+Lebesgue measure zero, and the energy is integrable in the larger ball.
+Strong gradient convergence yields \eqref{eq:error}. Thus no direct use of
+an unproved bounded Sobolev test extension of the weak equation is needed.
+\end{proof}
+
+\begin{lemma}[Energy and gradient-excess comparison]
+\label{lem:comparisons}
+Write \(E_x(r)=\int_{B_r(x)}|Dw|^2\) and
+\(\Phi_x(r)=\int_{B_r(x)}|Dw-(Dw)_{x,r}|^2\). For
+\(0<\theta\le1/2\),
+\begin{align}
+ E_x(\theta r)&\le(c_n\theta^n+cKHr^\alpha)E_x(r),
+ \label{eq:energycomparison}\\
+ \Phi_x(\theta r)&\le c_n\theta^{n+2}\Phi_x(r)
+                  +cKHr^\alpha E_x(r).
+ \label{eq:excesscomparison}
+\end{align}
+The constants are independent of the center, radius, map, and energy.
+\end{lemma}
+\begin{proof}
+Decompose \(Dw=Dh+(Dw-Dh)\), use the squared triangle inequality,
+\eqref{eq:henergy}, and \eqref{eq:orthogonal} for the first inequality.
+For the second, the ball mean minimizes the integral squared distance
+from a constant matrix. Compare \(Dw\) to \((Dh)_{x,\theta r}\), apply
+\eqref{eq:hexcess}, and observe
+\[
+ \int_{B_r(x)}|Dh-(Dh)_{x,r}|^2
+ \le2\Phi_x(r)+2\int_{B_r(x)}|Dw-Dh|^2.
+\]
+The last inequality follows by comparison with \((Dw)_{x,r}\).
+Insert \eqref{eq:error}; since \(\theta^{n+2}\le1\), all error terms
+have the stated bound. This derivation does not assume classical
+differentiability of \(w\).
+\end{proof}
+
+\section{Improved energy growth and uniform parameter selection}
+\label{sec:growth}
+
+Set
+\begin{equation}\label{eq:parameters}
+ r_0=\frac1{16},\qquad \beta=1-\frac\alpha4,\qquad
+ \lambda=n-2+2\beta=n-\frac\alpha2,\qquad
+ \gamma=\frac\alpha8.
+\end{equation}
+For every \(x\in B_{5/8}\) and \(r\le r_0\), the replacement ball is
+compactly contained in \(B_{3/4}\). Enlarge the comparison constants once
+to a number \(c\ge1\). Choose \(\theta_1\in(0,1/4]\) such that
+\(c\theta_1^{n-\lambda}\le1/4\), possible because
+\(n-\lambda=\alpha/2>0\). Choose \(H_0>0\) so that
+\begin{equation}\label{eq:smallholder}
+ c(1+K)H_0r_0^\alpha\le\tfrac14\theta_1^\lambda.
+\end{equation}
+The harmless \(1+K\) also covers \(K=0\).
+
+\begin{lemma}[Uniform improved growth]
+\label{lem:growth}
+If \(H\le H_0\), then for all the centers and radii above,
+\begin{equation}\label{eq:growth}
+ E_x(r)\le C_E E\,r^\lambda.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The comparison inequality gives
+\(E_x(\theta_1r)\le\tfrac12\theta_1^\lambda E_x(r)
+\le\theta_1^\lambda E_x(r)\).
+For \(r_j=\theta_1^jr_0\), induction gives
+\(E_x(r_j)\le(r_j/r_0)^\lambda E_x(r_0)\).
+If \(r_{j+1}<r\le r_j\), monotonicity of the ball integral gives
+\(E_x(r)\le E_x(r_j)\le\theta_1^{-\lambda}(r/r_0)^\lambda E\).
+This proves the bound with
+\(C_E=\theta_1^{-\lambda}r_0^{-\lambda}\), including every radius.
+No division by \(E\) occurs, so the argument includes \(E=0\).
+\end{proof}
+
+Combining \eqref{eq:error} and \eqref{eq:growth} gives
+\begin{equation}\label{eq:bettererror}
+ \int_{B_r(x)}|Dw-Dh|^2
+ \le C H E\,r^{\lambda+\alpha}
+ \le C E\,r^{n+\alpha/2}.
+\end{equation}
+The improvement beyond the exponent \(n\) is the reason for selecting
+\(\beta\) close to one before treating the gradient.
+
+Select the final energy threshold now:
+\begin{equation}\label{eq:threshold}
+ \varepsilon_*=
+ \min\{1,\ 4^{2-n}\varepsilon_H,\ (H_0/L)^2\}>0.
+\end{equation}
+The constant \(L>0\) may be enlarged if necessary. Under this threshold,
+Lemma~\ref{lem:localholder} supplies \(H\le L\sqrt E\le H_0\), and
+\(\sqrt E\le1\). No later derivative order changes this threshold.
+
+\section{Gradient oscillation, Campanato representatives, and classical derivatives}
+\label{sec:c1}
+
+\begin{lemma}[Gradient excess decay]
+\label{lem:excess}
+For \(x\in B_{5/8}\), \(0<r\le r_0\),
+\begin{equation}\label{eq:excess}
+ \Phi_x(r)\le C_\Phi E\,r^{n+2\gamma}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+By \eqref{eq:excesscomparison} and \eqref{eq:bettererror},
+\(\Phi_x(\theta r)\le c\theta^{n+2}\Phi_x(r)
+ +CEr^{n+\alpha/2}\).
+Put \(\nu=n+2\gamma=n+\alpha/4\),
+\(\mu=n+\alpha/2>\nu\), and choose \(\theta_2\in(0,1/4]\) with
+\(c\theta_2^{n+2}\le\tfrac12\theta_2^\nu\).
+For \(s_j=\theta_2^jr_0\) and
+\(Z_j=s_j^{-\nu}\Phi_x(s_j)\),
+\[
+ Z_{j+1}\le\tfrac12 Z_j+CE\theta_2^{-\nu}s_j^{\mu-\nu}.
+\]
+Iterating and bounding \(s_j^{\mu-\nu}\le r_0^{\mu-\nu}\) bounds
+\(Z_j\) by \(Z_0+2CE\theta_2^{-\nu}r_0^{\mu-\nu}\).
+Also \(\Phi_x(r_0)\le E\). To pass to an arbitrary radius
+\(s_{j+1}<r\le s_j\), compare to the constant mean on \(B_{s_j}(x)\);
+minimality of the mean gives \(\Phi_x(r)\le\Phi_x(s_j)\).
+This costs only the factor \(\theta_2^{-\nu}\).
+\end{proof}
+
+\begin{lemma}[Campanato reconstruction]
+\label{lem:campanato}
+Let \(g\) be a locally square-integrable Euclidean-vector-valued field,
+with \(\int_{B_{3/4}}|g|^2\le E\). Suppose
+\(\int_{B_r(x)}|g-g_{x,r}|^2\le M E r^{n+2\gamma}\) for
+\(x\in B_{5/8}\), \(r\le r_0\), where \(0<\gamma<1\).
+There is a continuous representative \(G\) on \(B_{5/8}\) with
+\begin{equation}\label{eq:campanatobound}
+ \sup_{B_{5/8}}|G|+[G]_{\gamma;B_{5/8}}
+ \le C(n,\gamma,r_0,M)\sqrt E.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Cauchy--Schwarz and the volume scaling of balls imply
+\[
+ |g_{x,r/2}-g_{x,r}|
+ \le C_n r^{-n/2}
+ \left(\int_{B_r(x)}|g-g_{x,r}|^2\right)^{1/2}
+ \le C_n\sqrt{ME}\,r^\gamma.
+\]
+The geometric sum \(\sum_j2^{-j\gamma}\) converges, uniformly in \(x\).
+The dyadic means therefore converge uniformly to \(G(x)\), with
+\(|G(x)-g_{x,r}|\le C\sqrt{ME}\,r^\gamma\).
+For radii between consecutive dyadic radii the same bound follows by
+comparison of means, with a volume ratio at most \(2^n\). Thus the limit
+is an all-radius limit. Lebesgue differentiation identifies it with \(g\)
+almost everywhere.
+If \(d=|x-y|\le r_0/4\), compare the means on \(B_{2d}(x)\) and
+\(B_{2d}(y)\) to that on \(B_{4d}(x)\). Both smaller balls lie in the
+last ball; Cauchy--Schwarz and the oscillation bound give differences
+at most \(C\sqrt{ME}\,d^\gamma\). Add the two limit-to-mean errors.
+At radius \(r_0\), the mean is bounded by
+\(C_nr_0^{-n/2}\sqrt E\); adding the limit error bounds \(G\) uniformly.
+For \(d>r_0/4\), the uniform bound gives the desired H\"older estimate
+with the additional constant \(2(r_0/4)^{-\gamma}\). These estimates prove
+continuity, so the almost-everywhere representative just obtained has the
+claimed pointwise meaning.
+\end{proof}
+
+Apply this lemma to the gradient matrix, viewed as a vector in its
+Hilbert--Schmidt Euclidean space. Denote its continuous representative
+by \(G\). Let \(T(x):\R^n\to\R^q\) have columns \(G_i(x)\).
+The operator norm of \(T\) is at most the Hilbert--Schmidt norm of \(G\).
+On a compact inner ball, mollification satisfies
+\(w_t\to w\) and \(Dw_t\to T\) uniformly: the weak derivatives commute
+with convolution, \(Du=G\) almost everywhere, and \(G\) is continuous.
+For a segment in that ball, the fundamental theorem of calculus gives,
+after passage to the uniform limit,
+\begin{equation}\label{eq:segment}
+ w(y)-w(x)=\int_0^1 T(x+s(y-x))(y-x)\dd s.
+\end{equation}
+Subtracting \(T(x)(y-x)\), the remainder is bounded by
+\([T]_\gamma |y-x|^{1+\gamma}/(1+\gamma)\). This proves classical
+differentiability, \(Dw=T\), and
+\begin{equation}\label{eq:c1}
+ \sup_{B_{5/8}}\norm{Dw}+[Dw]_{\gamma;B_{5/8}}
+ \le C_1\sqrt E.
+\end{equation}
+The same continuous representative is used throughout. The weak equation
+now has its classical gradient, but a pointwise second derivative has not
+yet been asserted.
+
+\begin{theorem}[Unit-ball quadratic Poisson first-derivative estimate]
+\label{thm:c1gate}
+Fix \(n\ge2,q\), \(\alpha\in(0,1)\), and \(K\ge0\). There are
+\(H_* >0\) and \(C<\infty\), depending only on \(n,q,\alpha,K\),
+such that the following holds. Let \(u\in W^{1,2}(B_1,\R^q)\) have
+\([u]_{\alpha;B_1}\le H\le H_*\), \(H\ge0\), and let
+\(\Delta u=F\) weakly with \(|F|\le K|Du|^2\) almost everywhere.
+Then \(u\in C^{1,\alpha/8}(B_{1/2})\), and
+\[
+\sup_{B_{1/2}}\norm{Du}\le C\left(\int_{B_1}|Du|^2\right)^{1/2},
+\qquad [Du]_{\alpha/8;B_{1/2}}
+\le C\left(\int_{B_1}|Du|^2\right)^{1/2}.
+\]
+The original continuous function is the resulting differentiable function.
+Their sum is bounded by twice the displayed constant times the energy square root.
+\end{theorem}
+\begin{proof}
+The arguments of Sections~\ref{sec:comparison}--\ref{sec:c1} use only
+the quadratic bound, H\"older continuity, and finite Sobolev energy.
+Apply them with centers in \(B_{1/2}\), starting radius \(1/16\),
+and sampling/replacement balls compactly contained in \(B_1\).
+Select \(H_*\) by \eqref{eq:smallholder}. All limit arguments are local
+on a slightly larger ball inside \(B_1\); the initial energy is bounded
+by the whole-ball energy. Campanato reconstruction and
+\eqref{eq:segment} give exactly the asserted representative and estimates.
+Increasing \(C\) once if needed gives both displayed estimates. No target
+constraint or minimality is used in this theorem.
+\end{proof}
+
+\begin{corollary}[Local qualitative upgrade]
+\label{cor:qualitative}
+A H\"older-continuous weak solution of
+\(\Delta v=\sum_i A(v)[D_iv,D_iv]\), with smooth \(A\), is locally smooth.
+More precisely, \(A\) is a smooth bilinear-map-valued function on
+\(\R^q\), \(v\in W^{1,2}_{\mathrm{loc}}(\Omega,\R^q)\), and every
+point has a compactly contained ball on which \(v\) has a finite H\"older
+bound with an exponent in \((0,1)\). The exponent and bound may vary
+between these local balls. The weak equation includes its locally
+integrable forcing and the signed test identity.
+No minimality is needed in this upgrade assertion.
+\end{corollary}
+\begin{proof}
+Fix a point and a Holder ball about it, then restrict to a concentric
+closed half-ball. Holder continuity implies continuity there, so its
+image is compact and the coefficient and all its derivatives have finite
+bounds on a compact ambient neighborhood of that image. Let \(K\ge0\)
+bound the resulting quadratic forcing coefficient. Choose a smaller
+radius \(\rho>0\), still compactly contained, such that
+\(H\rho^\alpha\le H_*\), where \(H_*\) is the threshold of
+Theorem~\ref{thm:c1gate}. This is possible even for \(H=0\), for instance
+by taking \(\rho\le(H_*/(1+H))^{1/\alpha}\) in addition to the containment
+restriction. For \(v_\rho(z)=v(b+\rho z)\), the actual weak gradient is
+\(\rho Dv(b+\rho z)\), its Holder bound is \(H\rho^\alpha\), and its
+weak forcing is \(F_\rho(z)=\rho^2F(b+\rho z)\). To verify the last
+identity, test the original equation with
+\(\psi((x-b)/\rho)\). Its derivative has the factor \(\rho^{-1}\),
+and changing measure contributes \(\rho^n\); multiplication by
+\(\rho^{2-n}\) gives exactly
+\(\int Dv_\rho:D\psi=-\int F_\rho\cdot\psi\).
+The quadratic coefficient bound \(K\) is unchanged. Compact-local
+Sobolev membership gives finite whole-ball Sobolev data after this
+rescaling. Theorem~\ref{thm:c1gate} gives local \(C^{1,\gamma}\)
+regularity. The next two sections give local higher regularity by repeated
+application of the proved Poisson estimate. For this qualitative application,
+take the parameter \(\delta=1\) in the composition estimate and let its
+constant include the finite local derivative bounds already obtained.
+This qualitative assertion
+does not claim constants uniform over maps with unrestricted H\"older norm.
+\end{proof}
+
+\section{A proved constant-coefficient Poisson Schauder estimate}
+\label{sec:schauder}
+
+\begin{lemma}[Interior Poisson estimate]
+\label{lem:schauder}
+Let \(0<s<t\), \(0<\eta<1\). Suppose \(v\) is continuous and locally
+Sobolev on \(B_t\), \(f\in C^{0,\eta}(B_t,\R^q)\) with finite norm,
+and \(\Delta v=f\) weakly. Then \(v\in C^{2,\eta}(B_s)\), the same
+equation holds classically on \(B_s\), and
+\begin{equation}\label{eq:schauder}
+ \norm{v-c}_{C^{2,\eta}(B_s)}
+ \le C(n,q,\eta,s,t)
+ \bigl(\sup_{B_t}|v-c|+\norm{f}_{C^{0,\eta}(B_t)}\bigr)
+\end{equation}
+for every constant vector \(c\), when the quantities on the right are finite.
+The translated and scaled versions follow by the usual affine change of
+variables. Only the scalar Laplacian, applied componentwise, is involved.
+\end{lemma}
+\begin{proof}
+Choose \(s<t_1<t_2<t\) and a smooth cutoff \(\chi\), equal to one on
+\(B_{t_1}\), supported in \(B_{t_2}\). Extend \(g=\chi f\) by zero.
+Then \(g\) is globally H\"older and compactly supported, and
+\begin{equation}\label{eq:cutoffholder}
+ \norm{g}_\infty+[g]_\eta
+ \le C(\eta,t_1,t_2,t)\norm{f}_{C^{0,\eta}(B_t)}.
+\end{equation}
+Inside \(B_t\) this is the product estimate, using the Lipschitz bound of
+\(\chi\). For one point outside \(B_t\) and the other in \(\supp\chi\),
+their distance is at least \(t-t_2\), which gives the same bound.
+
+Let \(\sigma_{n-1}\) be the area of the unit sphere and, for \(z\ne0\),
+\begin{equation}\label{eq:fundamental}
+ \Gamma_n(z)=
+ \begin{cases}
+ ((2-n)\sigma_{n-1})^{-1}|z|^{2-n},&n\ge3,\\
+ (2\pi)^{-1}\log|z|,&n=2.
+ \end{cases}
+\end{equation}
+This is locally integrable, as is its first derivative. Integrating by
+parts outside a ball of radius \(\epsilon\), its radial flux through
+the sphere is one. The terms involving \(\Gamma_n\) itself vanish as
+\(\epsilon\to0\), since their absolute bounds are \(O(\epsilon)\) for
+\(n\ge3\) and \(O(\epsilon|\log\epsilon|)\) for \(n=2\). Consequently
+\(\Delta\Gamma_n=\delta_0\) in distributions, with the displayed positive
+Laplacian convention.
+
+For \(z\ne0\), direct differentiation gives
+\begin{equation}\label{eq:kernel}
+ K_{ij}(z)=D_{ij}\Gamma_n(z)
+ =\sigma_{n-1}^{-1}
+ \bigl(\delta_{ij}|z|^{-n}-nz_iz_j|z|^{-n-2}\bigr).
+\end{equation}
+Thus \(|K_{ij}(z)|\le C_n|z|^{-n}\),
+\(|DK_{ij}(z)|\le C_n|z|^{-n-1}\), and
+\begin{equation}\label{eq:cancellation}
+ \int_{a<|z|<b}K_{ij}(z)\dz=0\quad(0<a<b).
+\end{equation}
+Indeed reflection kills off-diagonal sphere integrals, coordinate
+symmetry makes every diagonal integral equal, and their sum is the sphere
+area. Hence \(\int\theta_i\theta_j\dd S=\sigma_{n-1}\delta_{ij}/n\),
+which proves cancellation. A second integration by parts across the
+deleted sphere gives the distributional identity
+\begin{equation}\label{eq:deltaHessian}
+ D_{ij}\Gamma_n=\PV K_{ij}+\frac{\delta_{ij}}n\delta_0.
+\end{equation}
+The boundary term is
+\(\sigma_{n-1}^{-1}\int\theta_i\theta_j\varphi(\epsilon\theta)\dd S\),
+whose limit is \(\delta_{ij}\varphi(0)/n\). This term must not be omitted.
+
+Define \(P=\Gamma_n*g\). On any fixed bounded set its value and first
+derivative are bounded by \(C\norm{g}_\infty\), since their kernels are
+locally integrable and \(g\) has fixed bounded support. Its second
+derivative is
+\begin{equation}\label{eq:potentialHessian}
+ D_{ij}P(x)=\frac{\delta_{ij}}n g(x)
+ +\int_{|z|<1}K_{ij}(z)\bigl(g(x-z)-g(x)\bigr)\dz
+ +\int_{|z|\ge1}K_{ij}(z)g(x-z)\dz.
+\end{equation}
+The near integral is absolutely convergent, bounded by
+\(C[g]_\eta\int_0^1r^{\eta-1}\dd r=C[g]_\eta/\eta\).
+The far integral, on the bounded set in question, is bounded by a constant
+times \(\norm{g}_\infty\). These bounds are uniform in \(x\).
+
+Here are the details of the H\"older estimate, where cancellation is
+essential. Let \(d=|x-y|\), \(d>0\), and let \(D=B_{2d}(x)\).
+Write each principal value as the limit over expanding balls centered
+at its evaluation point, and subtract its constant value of \(g\), using
+\eqref{eq:cancellation}. On \(D\), the two integrals with differences
+\(g(z)-g(x)\) and \(g(z)-g(y)\) are bounded by \(C[g]_\eta d^\eta\):
+the relevant distances are at most \(2d\) and \(3d\). The extra constant
+term from changing the subtracted value is also bounded by this quantity,
+because
+\[
+ B_d(y)\subset D\subset B_{3d}(y),\qquad
+ \left|\PV\int_D K_{ij}(y-z)\dz\right|
+ \le C\int_d^{3d}\frac{\dd r}{r}=C\log3.
+\]
+On \(D^c\), the mean-value bound for the kernel gives
+\[
+ |K_{ij}(x-z)-K_{ij}(y-z)|\le Cd|x-z|^{-n-1}.
+\]
+Multiplying by \(|g(z)-g(x)|\le[g]_\eta|x-z|^\eta\) and integrating
+gives
+\(C[g]_\eta d\int_{2d}^\infty r^{\eta-2}\dd r
+ \le C[g]_\eta d^\eta/(1-\eta)\).
+The remaining constant term on \(D^c\) is the negative of the integral
+on \(D\), since the full centered annular integrals vanish; it is bounded
+by the same \(\log3\) estimate. When expanding the outer balls, the
+translation difference of their boundaries contributes \(O(d/R)\)
+times a bounded value of \(g\), and vanishes as \(R\to\infty\).
+The explicit \(g(x)\) term in \eqref{eq:potentialHessian} is H\"older as
+well. This proves the required full exponent \(\eta\) estimate, without
+a logarithmic loss.
+
+To justify classical differentiability for a merely H\"older \(g\),
+mollify \(g\) to \(g_\epsilon\). The potentials of these smooth data are
+smooth: differentiate the compactly supported data factor in
+\(\int\Gamma_n(z)g_\epsilon(x-z)\dz\); on every compact set of \(x\)
+the locally integrable kernel gives a common dominating function for each
+finite number of derivatives. The supports remain in a fixed compact
+set, their H\"older constants are uniformly bounded, and they converge
+uniformly to \(g\). Potentials and first derivatives converge uniformly
+on compact sets by local kernel integrability. For the Hessian formula,
+split at a fixed small radius \(a\). The near contribution to the
+difference is bounded by \(C[g]_\eta a^\eta\), uniformly in
+\(\epsilon\); on the complement uniform convergence of \(g_\epsilon\)
+gives convergence of the integrals. First let \(\epsilon\to0\), then
+\(a\to0\). Thus the Hessians converge uniformly to
+\eqref{eq:potentialHessian}. The fundamental theorem of calculus for
+the smooth potentials and their first derivatives identifies both limit
+derivatives. In particular \(P\in C^{2,\eta}\) locally. Taking the trace
+in \eqref{eq:potentialHessian} gives \(\Delta P=g\), because
+\(\sum_iK_{ii}=0\) and \(\sum_i\delta_{ii}/n=1\).
+
+Now \(h=v-P\) is continuous and weakly harmonic on \(B_{t_1}\).
+Its mollifications are harmonic on slightly smaller balls and converge
+uniformly on compact sets. Passing their mean-value identities to the
+limit and using the radial-kernel formula proves that \(h\) is smooth
+and harmonic. Its interior derivatives of orders up to three are bounded
+by a constant times \(\sup_{B_{t_1}}|h-c|\), as in
+\eqref{eq:hderivatives}. The third derivative bounds the H\"older
+seminorm of the second derivative on \(B_s\), since the ball is convex
+and \(|x-y|\le2s\). Combine these estimates for \(h\) with those for
+\(P\), and use \eqref{eq:cutoffholder}. This proves \eqref{eq:schauder}.
+\end{proof}
+
+\begin{corollary}[Unit-ball pointwise Schauder interface]
+\label{cor:unitschauder}
+For fixed \(n\ge2,q\) and \(\eta\in(0,1)\), there is \(C\ge0\),
+chosen before the solution and bounds, such that the following holds.
+Let \(v\in W^{1,2}_{\mathrm{loc}}(B_1,\R^q)\cap C(B_1,\R^q)\)
+weakly solve \(\Delta v=f\). Suppose
+\(\sup_{B_1}|v-c|\le M\), \(\sup_{B_1}|f|\le L\), and
+\([f]_{\eta;B_1}\le H\), with \(M,L,H\ge0\). Then
+\(v\in C^{2,\eta}(B_{1/2})\), the equation holds pointwise, and
+\[
+ \sup_{B_{1/2}}\norm{D^j(v-c)}\le C(M+L+H)\quad(0\le j\le2),
+ \qquad [D^2v]_{\eta;B_{1/2}}\le C(M+L+H).
+\]
+Here \(D^0(v-c)=v-c\).
+\end{corollary}
+\begin{proof}
+Use Lemma~\ref{lem:schauder} with \(s=1/2,t=1\). Conversely this unit
+interface supplies any fixed inner-radius version needed in the induction:
+put \(d=t-s\) and apply it on radius-\(d/2\) balls centered in \(B_s\).
+The rescaled forcing is \((d/2)^2f\), with H\"older bound
+\((d/2)^{2+\eta}H\). This gives uniform derivative bounds at every
+center. For pairs at distance below \(d/8\), use the same local estimate;
+for larger distances use twice the derivative supremum divided by
+\((d/8)^\eta\). Thus the global H\"older estimate on \(B_s\) also has
+a constant depending only on \(n,q,\eta,s,t\).
+\end{proof}
+
+\section{Higher-order estimates, one threshold, and affine transport}
+\label{sec:higher}
+
+The extension \(Q\) in \eqref{eq:coefficient} is globally smooth.
+At this point replace the forcing by its actual continuous representative
+\begin{equation}\label{eq:forcingrepresentative}
+ F_{\mathrm{cl}}(x)=\sum_i A(w(x))[D_iw(x),D_iw(x)],
+\end{equation}
+where the derivatives are now classical. It agrees almost everywhere with
+the original \(L^1\) forcing, because the classical and displayed weak
+gradients agree almost everywhere. Thus all weak test identities are
+unchanged. In this section \(F\) denotes \(F_{\mathrm{cl}}\). Its pointwise
+Holder and higher derivative estimates follow from the formula; no pointwise
+regularity is asserted for an arbitrary representative of the original forcing.
+Choose a closed Euclidean ball containing \(N\) in its interior. Every
+derivative \(D^jA\) has a finite supremum on this ball, by continuity and
+compactness. The ball is convex, so one additional derivative bounds the
+Lipschitz variation of \(D^jA\) between target values. Denote the resulting
+coefficient bounds by \(a_j\); they depend only on the fixed target and
+the chosen extension, which was selected before the map.
+
+\begin{lemma}[Quadratic composition estimates]
+\label{lem:nonlinear}
+Suppose \(w\in C^{m,\gamma}(B_s,N)\), \(m\ge1\), and for
+\(1\le j\le m\) its derivative suprema and highest H\"older seminorm
+are at most \(M\delta\), with \(0\le\delta\le1\). Then
+\begin{equation}\label{eq:nonlinear}
+ \left\|\sum_i A(w)[D_iw,D_iw]\right\|_{C^{m-1,\gamma}(B_s)}
+ \le P_m(M,a_0,\ldots,a_m,n,q,s)\delta^2,
+\end{equation}
+for a finite function of the displayed data. Lower derivative H\"older
+seminorms can be included in \(M\), by the next derivative bound on a
+convex ball. The expression is zero if \(\delta=0\).
+\end{lemma}
+\begin{proof}
+Repeated product and chain rules express each coordinate derivative of
+order \(\ell\le m-1\) as a finite sum of contractions of
+\[
+ (D^rA)(w),\quad D^{b_1}w,\ldots,D^{b_r}w,
+ \quad D^{c_1+1}w,\ D^{c_2+1}w,
+ \qquad \sum b_i+c_1+c_2=\ell,
+\]
+where \(b_i\ge1\) and \(c_1,c_2\ge0\). Thus every term contains at
+least two positive-order derivatives of \(w\), all of order at most
+\(m\). Its supremum is bounded by a constant times
+\(M^{r+2}\delta^{r+2}\le M^{r+2}\delta^2\).
+For the H\"older bound, subtract the values of a product at two points
+by replacing one factor at a time. For a derivative of \(w\) the
+corresponding H\"older factor is bounded by \(M\delta|x-y|^\gamma\).
+For \((D^rA)(w)\), use its Lipschitz bound and
+\([w]_\gamma\le C(s)\sup|Dw|\le C(s)M\delta\).
+Each term still contains at least the two derivative factors, and therefore
+has a factor \(\delta^2\). There are finitely many terms depending only
+on \(m,n,q\); their sum defines \(P_m\). This also explains precisely
+which higher coefficient bounds are required.
+\end{proof}
+
+Put \(\delta=\sqrt E\) and
+\begin{equation}\label{eq:nested}
+ s_m=\frac12+\frac18\,2^{-(m-1)},\qquad m\ge1.
+\end{equation}
+Thus \(s_1=5/8\), \(s_m>s_{m+1}>1/2\), and the limit is \(1/2\).
+By \eqref{eq:c1} and the H\"older oscillation of \(w\),
+\(\|w-w(0)\|_{C^{1,\gamma}(B_{s_1})}\le M_1\delta\).
+Suppose this assertion has been proved with order \(m\) and ball
+\(B_{s_m}\), enlarging \(M_m\) to include all lower-order H\"older norms.
+Lemma~\ref{lem:nonlinear} bounds \(F\) in \(C^{m-1,\gamma}(B_{s_m})\)
+by \(P_m\delta^2\).
+
+For \(m=1\), apply Lemma~\ref{lem:schauder} to \(w-w(0)\).
+For \(m\ge2\), take every coordinate derivative \(\partial^I w\)
+of order \(|I|=m-1\). Distributional derivatives commute, so
+\(\Delta\partial^Iw=\partial^IF\) weakly on \(B_{s_m}\).
+This identity follows by testing the original equation with
+\((-1)^{|I|}\partial^I\psi\); its support is still compactly contained,
+and integration by parts identifies the classical derivatives already
+available at this order. These maps are at least \(C^{1,\gamma}\).
+To verify their native Sobolev data explicitly, any \(C^1\) map on an
+open Euclidean set and its first derivatives are bounded on each compact
+subset. On a slightly larger compact neighborhood multiply by a smooth
+cutoff equal to one near that subset, then mollify. The approximations
+converge with their first derivatives uniformly there: differentiation
+under the integral and uniform continuity of the original \(C^1\)
+derivative give this convergence. Pass the smooth distributional
+gradient test identities to the uniform limit. Finite measure of compact
+sets also gives the required local \(L^2\) membership. Thus
+\begin{equation}\label{eq:c1sobolev}
+ C^1_{\mathrm{loc}}\ \Longrightarrow\
+ W^{1,2}_{\mathrm{loc}}\text{ with the actual classical derivative},
+\end{equation}
+which supplies the locally Sobolev inputs to the Poisson estimate.
+Applying that estimate between \(s_m\) and \(s_{m+1}\), and combining
+the finite coordinate derivatives, gives
+\[
+ \|w-w(0)\|_{C^{m+1,\gamma}(B_{s_{m+1}})}
+ \le S_m(M_m\delta+P_m\delta^2)
+ \le S_m(M_m+P_m)\delta.
+\]
+Here \(S_m\) includes the coordinate/operator-norm equivalence constants
+and the two radii. Define \(M_{m+1}\) by this finite recursion, increasing
+it to include lower-order seminorms. All choices depend only on \(n,N,m\),
+not on the map or \(E\). The fixed condition \(\delta\le1\) was already
+ensured by \eqref{eq:threshold}.
+
+For every finite \(m\), restriction to \(B_{1/2}\) gives the same
+\(C^{m,\gamma}\) estimate. These are derivatives of one function,
+not a sequence of independently selected representatives. Therefore
+\(w\in C^\infty(B_{1/2},N)\), and \eqref{eq:main} holds at unit scale.
+If \(E=0\), \eqref{eq:c1} gives \(Dw=0\); the segment identity makes
+\(w\) constant, and all estimates have zero right side.
+
+Finally let \(v(z)=u(a+Rz)\), with weak gradient
+\(Dv(z)=RDu(a+Rz)\). Affine change of variables gives
+\(\E(v;B_1)=\Th_u(a,R)\). The established Sobolev and minimizer
+transport shows that \(v\) satisfies the same hypotheses, so the
+unit-ball theorem applies with the same constants. Transport its
+representative back by \(z=(x-a)/R\). Almost-everywhere equality follows
+from the affine measure change, and it agrees with the original H\"older
+representative by continuity and almost-everywhere uniqueness. Repeated
+affine differentiation gives
+\[
+ D^jw(x)=R^{-j}D^j\widetilde v((x-a)/R),\qquad
+ [D^jw]_{\gamma;B_{R/2}(a)}
+ =R^{-j-\gamma}[D^j\widetilde v]_{\gamma;B_{1/2}}.
+\]
+This proves Theorem~\ref{thm:main}, including \eqref{eq:zero}, the
+unchanged representative, and the one-threshold quantifier order.
+
+\paragraph{Scope of the complete small-energy theorem.}
+The H\"older input plus this upgrade yields smoothness and quantitative
+ambient derivatives on the half-ball. Singular-set dimension estimates,
+boundary estimates, existence of minimizers, and Riemannian source-domain
+extensions are separate mathematical results and are not conclusions of
+Theorem~\ref{thm:main}.
+
+\begin{thebibliography}{9}
+\bibitem{GM} Mariano Giaquinta and Luca Martinazzi,
+\emph{An Introduction to the Regularity Theory for Elliptic Systems,
+Harmonic Maps and Minimal Graphs}, second edition, 2012.
+The harmonic comparison route is Theorem 9.7, pp. 215--216;
+the continuous weak-map consequence is Proposition 10.40, p. 265.
+Chapter 5 gives the Campanato and Schauder background.
+\bibitem{SU} Richard Schoen and Karen Uhlenbeck,
+\emph{A regularity theory for harmonic maps}, Journal of Differential
+Geometry \textbf{17} (1982), 307--335.
+\href{https://doi.org/10.4310/jdg/1214436923}{doi:10.4310/jdg/1214436923}.
+\bibitem{Holder} \emph{Schoen--Uhlenbeck small-energy H\"older regularity},
+Lean development and accompanying mathematical proof,
+\href{https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/tree/2a46c1e82d0580da7e1c9f62c58d0349c911cc8e}{pinned source revision 2a46c1e}.
+The reused inputs are \texttt{smallEnergyRegularity},
+\texttt{outerVariation\_weakEquation}, \texttt{tubularProjection\_complete},
+and the focused Sobolev, Poisson, Green, and affine transport modules.
+\end{thebibliography}
+\end{document}

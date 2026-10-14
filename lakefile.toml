@@ -1,6 +1,6 @@
 name = "harmonicMaps"
-version = "0.1.0"
-defaultTargets = ["HarmonicMaps"]
+version = "0.2.0"
+defaultTargets = ["HarmonicMaps", "HolderToCK"]
 
 [leanOptions]
 autoImplicit = false
@@ -13,3 +13,7 @@ rev = "905b95818eb32af7874a58b427f50c1711a5e96c"
 [[lean_lib]]
 name = "HarmonicMaps"
 globs = ["HarmonicMaps.*"]
+
+[[lean_lib]]
+name = "HolderToCK"
+globs = ["HolderToCK.*"]

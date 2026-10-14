@@ -28,7 +28,7 @@ def load_theorems():
         for key in ("module", "theorem"):
             if not isinstance(record[key], str) or not NAME.fullmatch(record[key]):
                 raise ValueError(f"Invalid Lean {key}: {record[key]!r}")
-            if not record[key].startswith("HarmonicMaps."):
+            if not record[key].startswith(("HarmonicMaps.", "HolderToCK.")):
                 raise ValueError(f"Unexpected Lean {key}: {record[key]}")
         fingerprint = record["type_sha256"]
         if not isinstance(fingerprint, str) or not re.fullmatch(r"[0-9a-f]{64}", fingerprint):
@@ -40,7 +40,7 @@ def load_theorems():
         if not source.is_file():
             raise ValueError(f"Missing source module: {record['module']}")
         declarations = strip_comments_and_strings(source.read_text(encoding="utf-8"))
-        short_name = record["theorem"].removeprefix("HarmonicMaps.")
+        short_name = record["theorem"].partition(".")[2]
         if not re.search(r"\btheorem\s+" + re.escape(short_name) + r"\b", declarations):
             raise ValueError(f"Missing theorem declaration: {record['theorem']}")
     return records
@@ -125,17 +125,19 @@ def strip_comments_and_strings(source):
 def check_frozen_coverage(records):
     """Require a manifest entry for every theorem in the public Frozen modules."""
     actual = set()
-    files = sorted((PROJECT / "HarmonicMaps" / "Frozen").glob("*.lean"))
+    files = sorted(path for namespace in ("HarmonicMaps", "HolderToCK")
+                   for path in (PROJECT / namespace / "Frozen").glob("*.lean"))
     if not files:
         raise ValueError("No public theorem modules found.")
     for path in files:
         source = strip_comments_and_strings(path.read_text(encoding="utf-8"))
         module = path.relative_to(PROJECT).with_suffix("").as_posix().replace("/", ".")
+        namespace = path.relative_to(PROJECT).parts[0]
         for name in re.findall(r"\btheorem\s+([A-Za-z_][A-Za-z0-9_']*)\b", source):
-            actual.add((module, "HarmonicMaps." + name))
+            actual.add((module, namespace + "." + name))
     expected = {
         (record["module"], record["theorem"])
-        for record in records if record["module"].startswith("HarmonicMaps.Frozen.")
+        for record in records if ".Frozen." in record["module"]
     }
     if actual != expected:
         raise ValueError("Frozen theorem declarations and the manifest do not agree.")

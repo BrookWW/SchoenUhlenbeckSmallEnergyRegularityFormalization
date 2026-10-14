@@ -1,121 +1,149 @@
-# Schoen–Uhlenbeck small-energy regularity, formalized in Lean 4
+# Schoen–Uhlenbeck small-energy regularity in Lean 4
 
 [![Build and verify](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/build.yml)
+[![Kernel replay](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/kernel.yml/badge.svg?branch=main)](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/kernel.yml)
 
-A Lean 4 formalization of quantitative small-energy Hölder regularity for
-locally energy-minimizing harmonic maps into a compact smooth embedded target.
-The proof follows Giaquinta–Martinazzi, Section 10.3.1: smoothing, harmonic
-replacement, annular comparison, energy decay, and Morrey's argument.
+A Lean 4 formalization of **interior smooth small-energy regularity** for
+locally energy-minimizing harmonic maps into compact smooth embedded targets.
+One positive energy threshold gives a unique smooth representative and
+quantitative bounds at every positive derivative order. The development
+includes the quantitative Hölder representative, its smooth upgrade, and the
+geometric and analytic proofs required by both results.
 
-The two principal results are **one-step energy decay** and **small-energy
-Hölder regularity**. The development includes the geometric and analytic
-ingredients used by these results, including nearest-point projection,
-stationarity from minimality, the monotonicity formula, variable smoothing,
-and a Poisson construction with smoothness up to the boundary.
-The mathematical argument and its source corrections are written in
-[sources/OriginalProof.tex](sources/OriginalProof.tex).
+The repository is one Lake project with two libraries. `HarmonicMaps` supplies
+Sobolev and minimizer data, projection geometry, stationarity, energy decay and
+the Hölder representative. `HolderToCK` uses these same objects to prove
+quadratic-Poisson C1 regularity, weak Poisson Schauder estimates, smoothness and
+all-order derivative bounds. The mathematical arguments are in
+[sources/OriginalProof.tex](sources/OriginalProof.tex) and
+[sources/holder_to_ck_regularity.tex](sources/holder_to_ck_regularity.tex).
+The scope is interior regularity on Euclidean source domains; boundary and
+singular-set regularity are separate results.
 
 ## What is proved
 
 Let $n\ge2$ and let $N\subset\mathbb R^q$ be a nonempty compact smooth embedded
-submanifold without boundary, with the metric induced by the ambient space.
-For an open set $\Omega\subset\mathbb R^n$, let
+submanifold without boundary, with its induced Euclidean metric. Let
 $u\in W^{1,2}_{\mathrm{loc}}(\Omega,\mathbb R^q)$ take values in $N$ almost
 everywhere and locally minimize Dirichlet energy among $N$-valued competitors
-whose difference from $u$ belongs to $W^{1,2}_0$ on the comparison ball. Set
+whose difference from $u$ belongs to $W^{1,2}_0$ on each comparison ball. Set
 
 $$
-E(u;B)=\int_B |Du|_{\mathrm{HS}}^2 dx,
+E(u;B)=\int_B |Du|_{\mathrm{HS}}^2\,dx,
 \qquad
-\Theta_u(a,r)=r^{2-n}E(u;B_r(a)).
+\Theta_u(a,R)=R^{2-n}E(u;B_R(a)).
 $$
 
-The energy has **no factor of $1/2$**. In Lean it takes values in
-$[0,\infty]$; the small-energy hypotheses imply its finiteness.
+Energy has **no factor of $1/2$**. Higher derivatives use ambient multilinear
+operator norms. The displayed weak gradient is retained in Sobolev membership,
+the equation and the energy.
 
-**One-step decay.** There are $\varepsilon_{\mathrm{dec}}\gt 0$ and
-$0\lt \tau\lt 1/8$, depending only on the dimension and target, such that
-
-$$
-E(u;B_1)\le\varepsilon_{\mathrm{dec}}
-\quad\Longrightarrow\quad
-\Theta_u(0,\tau)\le\tfrac12 E(u;B_1).
-$$
-
-**Small-energy regularity.** There are $\varepsilon\gt 0$, $0\lt \alpha\lt 1$ and
-$C\ge0$, depending only on the dimension and target, such that, whenever
-$\overline{B_R(a)}\subset\Omega$ and $\Theta_u(a,R)\le\varepsilon$, there is
-a unique continuous representative $w$ of $u$ on $B_{R/2}(a)$, with values
-in $N$, satisfying
+**Smooth small-energy regularity.** There are $\varepsilon\gt0$,
+$0\lt\gamma\lt1$, and one sequence $C_0,C_1,\ldots$ of finite nonnegative
+constants, depending only on $n,N$ and the derivative order, such that
+$\overline{B_R(a)}\subset\Omega$ and $\Theta_u(a,R)\le\varepsilon$ imply a
+unique continuous representative $w$ on $B_{R/2}(a)$ with values in $N$.
+This representative is smooth and satisfies
 
 $$
-|w(x)-w(y)|\le C R^{-\alpha}\sqrt{\Theta_u(a,R)} |x-y|^\alpha
-\qquad(x,y\in B_{R/2}(a)).
+\sup_{B_{R/2}(a)} |w-w(a)|\le C_0\sqrt{\Theta_u(a,R)},
 $$
 
-The constants are chosen before the domain, map, weak gradient, center, and
-radius. The endpoint conclusion is Hölder continuity of a representative;
-the theorem does not state a smoothness bootstrap or partial regularity.
-Both results include dimension $n=2$.
+$$
+\begin{aligned}
+R^k\sup_{B_{R/2}(a)}\|D^kw\|
+&\le C_k\sqrt{\Theta_u(a,R)},\\
+R^{k+\gamma}[D^kw]_{\gamma;B_{R/2}(a)}
+&\le C_k\sqrt{\Theta_u(a,R)},\qquad k\ge1.
+\end{aligned}
+$$
 
-## The Lean statement
+The threshold, exponent and entire constant sequence are chosen before the
+domain, map, weak gradient, center, radius and derivative order. Every order
+concerns derivatives of the same representative. The theorem includes $n=2$
+and zero energy.
 
-Import the regularity theorem with:
+**Quantitative Hölder regularity.** `HarmonicMaps.smallEnergyRegularity`
+provides the same local continuous representative with
+$|w(x)-w(y)|\le C R^{-\alpha}\sqrt{\Theta_u(a,R)}|x-y|^\alpha$.
+The Hölder and smooth representatives agree by local almost-everywhere
+uniqueness. Their available thresholds need not be equal.
+
+**One-step decay.** `HarmonicMaps.oneStepEnergyDecay` gives fixed
+$\varepsilon_{\mathrm{dec}}\gt0$ and $0\lt\tau\lt1/8$ such that
+$E(u;B_1)\le\varepsilon_{\mathrm{dec}}$ implies
+$\Theta_u(0,\tau)\le\tfrac12E(u;B_1)$.
+
+## Lean interface
+
+Import the combined source-facing results with:
 
 ```lean
-import HarmonicMaps.Frozen.SmallEnergyRegularity
+module
+public import HarmonicMaps.Regularity
+
+#check HarmonicMaps.oneStepEnergyDecay
+#check HarmonicMaps.smallEnergyRegularity
+#check HolderToCK.smallEnergySmoothRegularity
 ```
 
-Its declaration in
-[SmallEnergyRegularity.lean](HarmonicMaps/Frozen/SmallEnergyRegularity.lean) is:
+The complete smooth theorem is in namespace `HolderToCK`, in
+[SmallEnergySmoothRegularity.lean](HolderToCK/Frozen/SmallEnergySmoothRegularity.lean):
 
 ```lean
-theorem smallEnergyRegularity
+theorem smallEnergySmoothRegularity
     {n q : ℕ} (hn : 2 ≤ n) (N : CompactSmoothEmbeddedTarget q) :
-    ∃ ε α : ℝ, ∃ C : ℝ≥0,
-      0 < ε ∧ 0 < α ∧ α < 1 ∧
+    ∃ ε γ : ℝ, ∃ C : ℕ → ℝ≥0,
+      0 < ε ∧ 0 < γ ∧ γ < 1 ∧
       ∀ (Ω : OpenDomain n) (u : Domain n → Ambient q)
         (Du : Domain n → Gradient n q),
-        MemW12Loc Ω u Du →
-        TakesValuesIn N Ω u →
+        MemW12Loc Ω u Du → TakesValuesIn N Ω u →
         IsLocallyEnergyMinimizing N Ω u Du →
         ∀ (a : Domain n) (R : PositiveRadius),
           Metric.closedBall a R.val ⊆ Ω.val →
           normalizedEnergy Du a R ≤ ENNReal.ofReal ε →
-          ∃ w : Metric.ball a (R.val / 2) → Ambient q,
-            IsContinuousRepresentative (ballDomain a (R.val / 2)) u w ∧
-            (∀ x, w x ∈ N.carrierSet) ∧
-            (∀ x y : Metric.ball a (R.val / 2),
-              ‖w x - w y‖ ≤
-                (C : ℝ) * Real.rpow R.val (-α) *
-                  Real.sqrt (normalizedEnergy Du a R).toReal *
-                  Real.rpow (dist (x : Domain n) (y : Domain n)) α) ∧
-            ∀ v : Metric.ball a (R.val / 2) → Ambient q,
-              IsContinuousRepresentative (ballDomain a (R.val / 2)) u v →
-              v = w :=
-by exact HarmonicMaps.Providers.SmallEnergyRegularity.result hn N
+          ∃ w : Domain n → Ambient q,
+            ContDiffOn ℝ ∞ w (Metric.ball a (R.val / 2)) ∧
+            IsContinuousRepresentative (ballDomain a (R.val / 2)) u
+              (fun x => w x.val) ∧
+            (∀ x ∈ Metric.ball a (R.val / 2), w x ∈ N.carrierSet) ∧
+            (∀ x ∈ Metric.ball a (R.val / 2),
+              ‖w x - w a‖ ≤ (C 0 : ℝ) *
+                Real.sqrt (normalizedEnergy Du a R).toReal) ∧
+            (∀ k : ℕ, 1 ≤ k → ∀ x ∈ Metric.ball a (R.val / 2),
+              ‖iteratedFDeriv ℝ k w x‖ ≤ (C k : ℝ) *
+                Real.rpow R.val (-(k : ℝ)) *
+                Real.sqrt (normalizedEnergy Du a R).toReal) ∧
+            (∀ k : ℕ, 1 ≤ k →
+              HolderBoundOn (Metric.ball a (R.val / 2))
+                (iteratedFDeriv ℝ k w) γ
+                ((C k : ℝ) * Real.rpow R.val (-((k : ℝ) + γ)) *
+                  Real.sqrt (normalizedEnergy Du a R).toReal)) ∧
+            ∀ v : Domain n → Ambient q,
+              IsContinuousRepresentative (ballDomain a (R.val / 2)) u
+                (fun x => v x.val) →
+              Set.EqOn v w (Metric.ball a (R.val / 2)) :=
+by exact HolderToCK.Providers.SmallEnergySmoothRegularity.result hn N
+
 ```
 
-This declaration is in namespace `HarmonicMaps`. `Domain n` and `Ambient q`
-are Euclidean spaces; `Du` is the displayed weak gradient used throughout the
-energy and proof. `IsContinuousRepresentative` includes almost-everywhere
-agreement with `u`. The representative's subtype domain makes the uniqueness
-claim local to the inner ball.
+`Domain n` and `Ambient q` are Euclidean spaces. `Du` is the displayed weak
+gradient, and `IsContinuousRepresentative` includes almost-everywhere agreement
+with `u`. The conclusion `EqOn` gives uniqueness on the source half ball.
+`ContDiffOn ℝ ∞` gives every finite `Ck` regularity conclusion for this same map.
 
-`MemW12Loc` uses distributional derivatives and local $L^2$ conditions.
-`HasZeroBoundaryValues` is defined by closure of compactly supported smooth
-maps in the function-and-gradient $L^2$ norm. The target structure contains
-smooth embeddedness and compactness; tubular projection and its derivative
-estimates are proved consequences. See [Sobolev.lean](HarmonicMaps/Sobolev.lean),
-[Target.lean](HarmonicMaps/Target.lean), and
-[Minimizer.lean](HarmonicMaps/Minimizer.lean).
+`MemW12Loc` uses distributional derivatives and actual local $L^2$ data.
+`HasZeroBoundaryValues` is the function-and-gradient $L^2$ closure of smooth
+compactly supported maps. Smooth embeddedness and compactness are geometric
+data; tubular projection and its derivative estimates are proved consequences.
+See [Sobolev.lean](HarmonicMaps/Sobolev.lean), [Target.lean](HarmonicMaps/Target.lean)
+and [Minimizer.lean](HarmonicMaps/Minimizer.lean).
 
 ## Proof structure
 
-Arrows point from prerequisites to the conclusions they support. These are
-mathematical dependency diagrams; routine measure and Sobolev infrastructure
-is omitted. The blue node marks code adapted from the earlier stationary-map
-project. All the surrounding implications are proved in this development.
+Arrows describe mathematical dependencies. Both libraries share the actual
+Sobolev, target, minimizer and energy definitions. The detailed upgrade and
+its constant choices are explained in [docs/regularity.md](docs/regularity.md).
 
 ### From minimality to one-step decay
 
@@ -192,91 +220,107 @@ $\varepsilon=2^{2-n}\varepsilon_{\mathrm{dec}}$ makes the estimate uniform
 at every center in the half ball. Morrey's representative is constructed as
 the limit of ball averages; closedness of $N$ gives its pointwise target values.
 
-## Mathematical difficulties and source corrections
 
-The [manuscript](sources/OriginalProof.tex), especially its final section,
-records the adopted source corrections. The points below also explain the
-additional constructions needed to realize the argument in Lean.
+### From the Hölder representative to smoothness
 
-- **Consistent scales.** The textbook's earlier choice
-  $\bar h=\varepsilon_0^{1/(2n)}$ is inconsistent in general dimension with
-  its later identity $2\bar h\varepsilon_0^{-1/8}=2\varepsilon_0^{1/8}$.
-  Monotonicity improves the rough smoothing bound to
-  $|Dm_h|^2\le C\eta h^{-2}$. The proof consistently uses
-  $\bar h=\eta^{1/4}$, $\delta=\eta^{1/8}$ and
-  $\tau=\eta^{1/(64(n-1))}$, with scales fixed by a uniform threshold before
-  choosing the map. This also covers $n=2$ without dividing by $n-2$.
-- **Variations require admissible Sobolev competitors.** Smooth changes of
-  variables must preserve the actual weak gradient, target condition, and
-  zero-boundary difference. Dominated energy difference quotients then derive
-  stationarity from minimality. Stationarity is not an extra hypothesis.
-- **Smoothing can vanish on the gluing region.** The derivative of
-  $x\mapsto x-s(x)y$ retains the full matrix $I-y\otimes Ds$ and determinant
-  $1-Ds\cdot y$. Density and $L^2$ closure identify the weak derivative for
-  rough inputs. Almost-everywhere equality on an outer collar establishes
-  admissibility without assuming continuity of the original map.
-- **Boundary regularity and sphere measure need separate proofs.** Interior
-  Poisson smoothness does not justify boundary Green identities. Rotation
-  covariance transfers angular derivatives to smooth boundary data; Euler
-  radial identities recover the full derivatives on the closed ball.
-  The canonical polar measure is also identified with normalized Euclidean
-  Hausdorff surface measure, preserving the Poisson normalization.
-- **A representative is part of the conclusion.** The Morrey proof identifies
-  an all-radius limit of ball averages, proves almost-everywhere agreement,
-  and establishes uniqueness among continuous representatives. Affine
-  transport carries these properties and the exact radius factor to the
-  original ball.
+```mermaid
+flowchart TD
+    H["Enlarged-ball Hölder representative<br/>and original weak gradient"]
+    G["Smooth projection coefficient<br/>and quadratic weak equation"]
+    R["Continuous Sobolev harmonic replacement<br/>and quadratic error"]
+    E["Improved energy growth<br/>and gradient-excess decay"]
+    C["Campanato limits<br/>and same-map classical gradient"]
+    Q["Quantitative C1 and Hölder gradient"]
+    P["Fundamental solution and cancellation<br/>Weak Poisson Schauder estimate"]
+    D["Actual differentiated weak equations<br/>Quadratic forcing bounds"]
+    B["Same-map nested-ball induction<br/>One threshold and one constant sequence"]
+    A["Affine Sobolev/minimizer transport<br/>Exact all-order derivative and seminorm scaling"]
+    S["Unique smooth representative<br/>All positive-order interior estimates"]
+    H --> G
+    H --> R
+    G --> R
+    R --> E
+    E --> C
+    C --> Q
+    Q --> D
+    P --> B
+    D --> B
+    Q --> B
+    G --> B
+    B --> S
+    A --> S
+```
 
-## Main modules
+The C1 gate is proved from harmonic comparison and Campanato decay. The
+Schauder estimate is proved using the fundamental solution, Hessian
+cancellation and the correctly signed distributional point term. Differentiated
+weak equations and quadratic product estimates supply each induction step.
+All affine scaling uses the original map and its actual weak gradient.
 
-All declaration names below are in namespace `HarmonicMaps`.
+## Main exports and modules
 
-| Result or interface | Module |
+| Result | Namespace / module |
 |---|---|
-| `smallEnergyRegularity` | [Frozen/SmallEnergyRegularity](HarmonicMaps/Frozen/SmallEnergyRegularity.lean) |
-| `oneStepEnergyDecay` | [Frozen/OneStepEnergyDecay](HarmonicMaps/Frozen/OneStepEnergyDecay.lean) |
-| Tubular projection and quantitative derivatives | [Frozen/TubularProjection](HarmonicMaps/Frozen/TubularProjection.lean) |
-| Weak Euler equation | [Frozen/OuterVariation](HarmonicMaps/Frozen/OuterVariation.lean) |
-| Uniform smoothing estimates | [Frozen/UniformSmoothing](HarmonicMaps/Frozen/UniformSmoothing.lean) |
-| `IsLocallyEnergyMinimizing.monotonicity` | [Analysis/Monotonicity](HarmonicMaps/Analysis/Monotonicity.lean) |
-| Variable-radius smoothing | [Analysis/VariableMollification](HarmonicMaps/Analysis/VariableMollification.lean) |
-| Poisson solution and native Sobolev data | [Analysis/PoissonSourceDirichlet](HarmonicMaps/Analysis/PoissonSourceDirichlet.lean) |
-| Harmonic replacement estimates | [Analysis/HarmonicReplacementEstimates](HarmonicMaps/Analysis/HarmonicReplacementEstimates.lean) |
-| Energy iteration and centered growth | [Analysis/EnergyIteration](HarmonicMaps/Analysis/EnergyIteration.lean), [Analysis/CenteredEnergyGrowth](HarmonicMaps/Analysis/CenteredEnergyGrowth.lean) |
-| `morrey_representative` | [Analysis/MorreyRepresentative](HarmonicMaps/Analysis/MorreyRepresentative.lean) |
-| Arbitrary-ball assembly | [Analysis/GeneralBallRegularity](HarmonicMaps/Analysis/GeneralBallRegularity.lean) |
+| Complete entry point | [HarmonicMaps.Regularity](HarmonicMaps/Regularity.lean) |
+| Smooth small-energy regularity | [HolderToCK.smallEnergySmoothRegularity](HolderToCK/Frozen/SmallEnergySmoothRegularity.lean) |
+| Hölder small-energy regularity | [HarmonicMaps.smallEnergyRegularity](HarmonicMaps/Frozen/SmallEnergyRegularity.lean) |
+| One-step energy decay | [HarmonicMaps.oneStepEnergyDecay](HarmonicMaps/Frozen/OneStepEnergyDecay.lean) |
+| Quantitative quadratic-Poisson C1 | [HolderToCK.holderQuadraticPoissonC1](HolderToCK/Frozen/HolderQuadraticPoissonC1.lean) |
+| Weak Poisson interior Schauder | [HolderToCK.poissonInteriorSchauder](HolderToCK/Frozen/PoissonInteriorSchauder.lean) |
+| Local quadratic-Poisson smoothness without minimality | [HolderToCK.holderQuadraticPoisson_smooth](HolderToCK/Frozen/HolderQuadraticPoissonSmooth.lean) |
+| Projection geometry and weak Euler equation | [TubularProjection](HarmonicMaps/Frozen/TubularProjection.lean), [OuterVariation](HarmonicMaps/Frozen/OuterVariation.lean) |
+| Uniform smoothing and monotonicity | [UniformSmoothing](HarmonicMaps/Frozen/UniformSmoothing.lean), [Monotonicity](HarmonicMaps/Analysis/Monotonicity.lean) |
+| Nested-ball quantitative induction | [UniformThreshold](HolderToCK/Analysis/Bootstrap/UniformThreshold.lean) |
+| Literal Hölder seminorm and exact affine equality | [HolderSeminorm](HolderToCK/Foundation/HolderSeminorm.lean), [AffineSeminorm](HolderToCK/Analysis/Bootstrap/AffineSeminorm.lean) |
 
-## Building and checking
+The generic quadratic-Poisson smoothness export uses local Hölder data and the
+actual smooth-coefficient equation; it assumes no energy-minimizing property
+or target manifold. It is a separate reusable consequence of the analytic
+bootstrap.
 
-[GitHub Actions](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/build.yml)
-runs the full build and both verification scripts on Ubuntu for pushes to
-`main` and pull requests. It also supports manual runs. The workflow installs
-the pinned Lean toolchain, downloads the Mathlib cache, and checks that the
-committed dependency files remain unchanged.
+## Build and verify
 
 The project pins **Lean 4.32.2** and Mathlib commit
-`905b95818eb32af7874a58b427f50c1711a5e96c`. With `elan` and Python 3 installed:
+`905b95818eb32af7874a58b427f50c1711a5e96c`. Mathlib is the sole directly declared
+external Lake dependency. Both mathematical libraries belong to this package and are maintained together
+in this repository. Mathematical interfaces and their verification baselines
+are reviewed and updated here.
+With `elan` and Python 3.9 or later installed:
 
 ```sh
 lake exe cache get
 lake build
-python3 scripts/check_axioms.py
+python3 scripts/check_sources.py
 python3 scripts/check_statements.py
+python3 scripts/check_axioms.py
 ```
 
-The default build checks all 244 project Lean modules. The source scan finds
-no unfinished proofs or project axioms. All 37 theorem dependency closures
-checked by the audit use only `propext`, `Classical.choice`, and `Quot.sound`;
-all 11 stored theorem-type fingerprints match.
+The default build covers both libraries and all **376 Lean modules**. The source
+scan admits no unfinished proof, project axiom or native trust bypass.
+The axiom checks cover the advertised theorem chain and **632 registered
+upgrade/interface exports**, allowing only `propext`, `Classical.choice` and
+`Quot.sound`. All **15 stored complete theorem-type fingerprints** match their
+baselines. Source checks protect the two manuscripts, the meaning-carrying
+foundation files, all 131 upgrade modules and the fixed build configuration.
+There are no draft theorem exports.
 
-Keep the committed `lean-toolchain` and `lake-manifest.json` when reproducing
-this version. The axiom check tests the exported results against Lean's
-standard `propext`, `Classical.choice`, and `Quot.sound`; the statement check
-compares 11 elaborated theorem types with the saved baselines in
-`verification/`. It does not unfold or independently check the foundational
-definitions. Kernel checking verifies the formal
-propositions. The displayed statements and definitions make their mathematical
-scope available for separate inspection.
+To replay the compiled project declarations through the pinned Lean kernel:
+
+```sh
+LEAN_NUM_THREADS=2 lake --no-build env leanchecker HarmonicMaps HolderToCK -v
+```
+
+This is Lean's compiled-declaration replay tool. Type fingerprints check the
+complete elaborated interfaces; source fingerprints check supplied byte
+baselines. Mathematical interpretation is documented in the statements,
+foundational definitions and manuscripts.
+
+The [build workflow](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/build.yml)
+runs both-library builds, source checks, theorem-type checks and axiom checks.
+The [kernel workflow](https://github.com/BrookWW/SchoenUhlenbeckSmallEnergyRegularityFormalization/actions/workflows/kernel.yml)
+also runs compiled-declaration replay. Both support manual dispatch and run
+for pushes to `main` and pull requests, with separate build caches. Keep the
+committed toolchain and dependency lockfile when reproducing the development.
 
 ## Reuse and acknowledgments
 
@@ -301,7 +345,8 @@ full monotonicity theorem is proved from this project's local minimality.
 
 The mathematical sources are Giaquinta–Martinazzi,
 *An Introduction to the Regularity Theory for Elliptic Systems, Harmonic Maps
-and Minimal Graphs*, second edition, Section 10.3.1, and Schoen–Uhlenbeck,
+and Minimal Graphs*, second edition, Section 10.3.1, Theorem 9.7 and Proposition 10.40, and
+Schoen–Uhlenbeck,
 [*A regularity theory for harmonic maps*](https://doi.org/10.4310/jdg/1214436923),
 *Journal of Differential Geometry* **17** (1982), 307–335. The formalized proof
 is the textbook route detailed in the included manuscript. Mathlib supplies

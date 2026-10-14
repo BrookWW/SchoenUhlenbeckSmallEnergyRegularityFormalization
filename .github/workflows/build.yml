@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: lean-${{ github.workflow }}-${{ github.ref }}
+  group: build-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -35,20 +35,40 @@ jobs:
             sudo docker image prune --all --force > /dev/null || true
           fi
           df -h .
+          available_kib="$(df -Pk . | awk 'NR==2 {print $4}')"
+          test "$available_kib" -ge 20971520
 
-      - name: Build all Lean modules
+      - name: Restore build cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .lake
+          key: lake-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: |
+            lake-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}-
+            lake-kernel-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}-
+
+      - name: Build both Lean libraries
         uses: leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865 # v1
         with:
           auto-config: "false"
           build: "true"
           use-mathlib-cache: "true"
-          use-github-cache: "true"
+          use-github-cache: "false"
+
+      - name: Check public sources and dependencies
+        run: python3 scripts/check_sources.py
+
+      - name: Check complete theorem types
+        run: python3 scripts/check_statements.py
 
       - name: Check theorem axioms
         run: python3 scripts/check_axioms.py
 
-      - name: Check theorem statement types
-        run: python3 scripts/check_statements.py
-
-      - name: Check pinned dependency files
+      - name: Check fixed dependency files
         run: git diff --exit-code -- lean-toolchain lakefile.toml lake-manifest.json
+
+      - name: Save build cache
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .lake
+          key: lake-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}-${{ github.sha }}

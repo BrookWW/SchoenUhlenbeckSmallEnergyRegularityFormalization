@@ -56,6 +56,26 @@
       "module": "HarmonicMaps.Frozen.UniformSmoothing",
       "theorem": "HarmonicMaps.uniformSmoothing_complete",
       "type_sha256": "cc08708923a2fee1c7d12fa7bcbcb80a7789a7aa0bb2b18708ed3d31e8fb8356"
+    },
+    {
+      "module": "HolderToCK.Frozen.HolderQuadraticPoissonC1",
+      "theorem": "HolderToCK.holderQuadraticPoissonC1",
+      "type_sha256": "2eb00fabdca7a32d93d2299f4eac37d2928475ee4917da98bd425a44ad579952"
+    },
+    {
+      "module": "HolderToCK.Frozen.PoissonInteriorSchauder",
+      "theorem": "HolderToCK.poissonInteriorSchauder",
+      "type_sha256": "3279b48cbdad846f4b190c0993dedc09f00d863f2f86fac27db2ce90a3cdf8b5"
+    },
+    {
+      "module": "HolderToCK.Frozen.SmallEnergySmoothRegularity",
+      "theorem": "HolderToCK.smallEnergySmoothRegularity",
+      "type_sha256": "aec08aeea4b8fceaa068c28b65e22ba7401593ae25d543f31ed05dc176123eda"
+    },
+    {
+      "module": "HolderToCK.Frozen.HolderQuadraticPoissonSmooth",
+      "theorem": "HolderToCK.holderQuadraticPoisson_smooth",
+      "type_sha256": "9f0571b6b3f4b47b90dd38ad13bc91bf748d17c9f3cc593a362ad6cd36dfff4f"
     }
   ]
 }
