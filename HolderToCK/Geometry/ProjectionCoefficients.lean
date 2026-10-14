@@ -54,7 +54,7 @@ theorem minimizer_projection_quadratic_weakPoisson {q : ℕ}
     (N : CompactSmoothEmbeddedTarget q) :
     ∃ A : Ambient q → Ambient q →L[ℝ] Ambient q →L[ℝ] Ambient q,
       ContDiff ℝ ∞ A ∧ ∃ K : ℝ, 0 < K ∧ (∀ z, ‖A z‖ ≤ K) ∧
-        ∀ (n : ℕ) (hn : 2 ≤ n) (Ω : OpenDomain n)
+        ∀ (n : ℕ) (_hn : 2 ≤ n) (Ω : OpenDomain n)
           (u : Domain n → Ambient q) (Du : Domain n → Gradient n q),
           MemW12Loc Ω u Du → TakesValuesIn N Ω u → IsLocallyEnergyMinimizing N Ω u Du →
           ∃ F : Domain n → Ambient q,

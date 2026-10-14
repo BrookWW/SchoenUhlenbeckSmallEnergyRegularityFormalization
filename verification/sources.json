@@ -169,7 +169,7 @@
     "HolderToCK/Frozen/PoissonInteriorSchauder.lean": "d6bdd461d7a30cf769416b4e9dfff37270145a826da8057a90ad5dcbaa1ab043",
     "HolderToCK/Frozen/SmallEnergySmoothRegularity.lean": "7325cf7f4d41ed2cec35d94e580b356f32844ce2b716faf33e23269798e43000",
     "HolderToCK/Geometry/MinimizerRepresentativeEquation.lean": "c315a15fbb5bcc8f8a6974901997dcd09d155e55680f2a0da197a9b33e1ec279",
-    "HolderToCK/Geometry/ProjectionCoefficients.lean": "55d59e444e8a3e1b15000f454e1ad056dfed5479fb735b1a706e15635342661b",
+    "HolderToCK/Geometry/ProjectionCoefficients.lean": "17e159fdb04f51e9135ae59904e68a3cdb8e4278abb3a6caf4beb2a59235f3f3",
     "HolderToCK/Integration/HolderInput.lean": "63951945e012ff1d4d53fbcf8b69ea9974944ddbbbac4df16143954f3d038ead",
     "HolderToCK/Providers/HolderQuadraticPoissonC1.lean": "d4ac3fea3ff0537bd5834d00d19eeccda30aa57a11206f809f7f411c74480a5e",
     "HolderToCK/Providers/HolderQuadraticPoissonSmooth.lean": "0f25bf0d9ccbc75d40164444a74e09c6ad3cb4d96baa705543944e7978992247",
